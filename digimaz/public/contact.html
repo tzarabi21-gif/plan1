@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ارتباط با ما | دیجی ماز</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #181c27;
+      --surface2: #1e2335;
+      --border: #2a3050;
+      --accent: #4f8ef7;
+      --accent2: #7c5cbf;
+      --accent3: #3dbfa0;
+      --accent5: #e05c7a;
+      --text: #e8ecf5;
+      --text2: #8a94b0;
+      --text3: #5a6280;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Vazirmatn', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 32px; border-bottom: 1px solid var(--border);
+      background: rgba(15,17,23,0.97); position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .logo {
+      font-weight: 900; font-size: 1.2rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-links a {
+      color: var(--text2); text-decoration: none;
+      padding: 6px 14px; border-radius: 8px;
+      font-weight: 600; font-size: 0.85rem; transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-links a.active { color: var(--accent); background: rgba(79,142,247,0.1); }
+
+    .container { max-width: 700px; margin: 0 auto; padding: 40px 20px; }
+
+    h1 {
+      font-size: 1.7rem; font-weight: 900; margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .subtitle { color: var(--text2); margin-bottom: 32px; line-height: 1.7; }
+
+    .contact-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px; margin-bottom: 20px;
+    }
+    .contact-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .contact-item:last-child { border-bottom: none; }
+    .contact-icon { font-size: 1.4rem; min-width: 36px; text-align: center; }
+    .contact-info h3 { font-size: 0.95rem; margin-bottom: 4px; }
+    .contact-info p, .contact-info a { color: var(--text2); font-size: 0.85rem; text-decoration: none; }
+    .contact-info a:hover { color: var(--accent); }
+
+    .form-title { font-size: 1rem; font-weight: 700; margin-bottom: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.75rem; color: var(--text2); margin-bottom: 6px; font-weight: 600; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text);
+      font-family: 'Vazirmatn', sans-serif;
+      padding: 12px 14px; font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none; border-color: var(--accent);
+    }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+
+    /* Formspree needs a honeypot hidden field */
+    .hidden-field { display: none !important; }
+
+    .submit-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border: none; border-radius: 10px;
+      padding: 12px 28px; font-family: 'Vazirmatn', sans-serif;
+      font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .submit-btn:hover { transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert {
+      padding: 14px 18px; border-radius: 10px;
+      margin-top: 16px; font-size: 0.88rem; display: none;
+    }
+    .alert-success {
+      background: rgba(61,191,160,0.12); border: 1px solid var(--accent3); color: var(--accent3);
+    }
+    .alert-error {
+      background: rgba(224,92,122,0.12); border: 1px solid var(--accent5); color: var(--accent5);
+    }
+
+    /* Formspree endpoint note */
+    .formspree-note {
+      font-size: 0.72rem; color: var(--text3); margin-top: 12px; text-align: center;
+    }
+    .formspree-note a { color: var(--text3); }
+    .formspree-note a:hover { color: var(--accent); }
+
+    footer {
+      text-align: center; padding: 24px; color: var(--text3);
+      font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">📚 دیجی ماز</div>
+    <div class="nav-links">
+      <a href="index.html">خانه</a>
+      <a href="schedule.html">برنامه مطالعاتی</a>
+      <a href="progress.html">پیشرفت من</a>
+      <a href="contact.html" class="active">ارتباط با ما</a>
+    <span id="dm-auth" style="margin-right:6px"></span>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>ارتباط با ما</h1>
+    <p class="subtitle">سؤالی دارید، پیشنهادی دارید یا مشکلی در برنامه مطالعاتی دیدید؟ خوشحال می‌شویم از شما بشنویم.</p>
+
+    <div class="contact-card">
+      <div class="contact-item">
+        <div class="contact-icon">📧</div>
+        <div class="contact-info">
+          <h3>ایمیل</h3>
+          <p><a href="mailto:support@digimaz.ir">support@digimaz.ir</a></p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📱</div>
+        <div class="contact-info">
+          <h3>تلگرام</h3>
+          <p><a href="https://t.me/digimaz" target="_blank">@digimaz</a></p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div class="contact-info">
+          <h3>ساعات پاسخگویی</h3>
+          <p>شنبه تا پنجشنبه — ۹ صبح تا ۶ عصر</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <div class="form-title">📝 فرم تماس</div>
+
+      <!--
+        ════════════════════════════════════════════════════
+        برای فعال‌سازی Formspree:
+        ۱. به https://formspree.io بروید و ثبت‌نام کنید
+        ۲. یک فرم جدید بسازید و endpoint آن را کپی کنید
+        ۳. مقدار FORMSPREE_ENDPOINT زیر را جایگزین کنید
+           مثال: https://formspree.io/f/xdkozwpn
+        ════════════════════════════════════════════════════
+      -->
+      <form id="contact-form">
+        <!-- Honeypot anti-spam field -->
+        <input type="text" name="_gotcha" class="hidden-field" tabindex="-1" autocomplete="off">
+        <!-- Subject prefix for email inbox -->
+        <input type="hidden" name="_subject" value="[دیجی ماز] پیام جدید از سایت">
+
+        <div class="form-group">
+          <label>نام و نام خانوادگی *</label>
+          <input type="text" name="name" id="name" required placeholder="نام خود را وارد کنید">
+        </div>
+        <div class="form-group">
+          <label>ایمیل یا شماره تماس *</label>
+          <input type="text" name="contact" id="contact" required placeholder="ایمیل یا شماره موبایل">
+        </div>
+        <div class="form-group">
+          <label>موضوع</label>
+          <select name="subject" id="subject">
+            <option>سؤال درباره برنامه مطالعاتی</option>
+            <option>گزارش مشکل فنی</option>
+            <option>پیشنهاد و انتقاد</option>
+            <option>سایر</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>پیام شما *</label>
+          <textarea name="message" id="message" required placeholder="پیام خود را بنویسید..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">
+          <span class="spinner" id="spinner"></span>
+          <span id="submit-text">ارسال پیام</span>
+        </button>
+
+        <div class="alert alert-success" id="success-alert">
+          ✅ پیام شما با موفقیت ارسال شد! به زودی پاسخ می‌دهیم.
+        </div>
+        <div class="alert alert-error" id="error-alert">
+          ⚠️ خطا در ارسال پیام. لطفاً مستقیماً به ایمیل support@digimaz.ir بنویسید.
+        </div>
+      </form>
+
+      <p class="formspree-note">
+        فرم از طریق <a href="https://formspree.io" target="_blank">Formspree</a> ارسال می‌شود.
+        برای راه‌اندازی، endpoint را در کد جایگزین کنید.
+      </p>
+    </div>
+  </div>
+
+  <footer>دیجی ماز • برنامه مطالعاتی آزمون ۱۳ آذر ۱۴۰۵</footer>
+
+  <script>
+// Formspree endpoint (legacy — now managed from admin panel / server config)
+const FORMSPREE_ENDPOINT = (window.__FORMSPREE || 'https://formspree.io/f/YOUR_FORM_ID');
+</script>
+<script src="api.js"></script>
+<script>
+DigiMazAPI.initPublic(); DigiMazAPI.renderAuthWidget().then(cfg=>{ if(!cfg) return; try{ if(cfg.contact){ const em=cfg.contact.email, tg=cfg.contact.telegram, hr=cfg.contact.hours; const items=document.querySelectorAll(".contact-info p, .contact-info a"); } if(cfg.site&&cfg.site.brand){ const l=document.querySelector(".logo"); if(l) l.textContent=(cfg.site.logoEmoji||"📚")+" "+cfg.site.brand; } }catch(e){} });
+// server-first message send
+(function(){ const form=document.getElementById("contact-form"); if(!form) return; form.addEventListener("submit", async function(e){ e.preventDefault(); e.stopImmediatePropagation(); const btn=document.getElementById("submit-btn"),sp=document.getElementById("spinner"),tx=document.getElementById("submit-text"),ok=document.getElementById("success-alert"),er=document.getElementById("error-alert"); ok.style.display="none"; er.style.display="none"; btn.disabled=true; sp.style.display="block"; tx.textContent="در حال ارسال…"; const data={name:document.getElementById("name").value.trim(),contact:document.getElementById("contact").value.trim(),subject:document.getElementById("subject").value,message:document.getElementById("message").value.trim()}; const r=await DigiMazAPI.sendMessage(data); form.reset(); btn.disabled=false; sp.style.display="none"; tx.textContent="ارسال پیام"; ok.textContent = r.online ? "✅ پیام با موفقیت به سرور ارسال شد!" : "✅ پیام ذخیره شد (آفلاین — بعداً همگام می‌شود)."; ok.style.display="block"; setTimeout(()=>ok.style.display="none",6000); }, true); })();
+</script>
+</body>
+</html>

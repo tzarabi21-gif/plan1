@@ -1,0 +1,2603 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>برنامه مطالعاتی آزمون ۱۳ آذر</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #181c27;
+  --surface2: #1e2335;
+  --border: #2a3050;
+  --accent: #4f8ef7;
+  --accent2: #7c5cbf;
+  --accent3: #3dbfa0;
+  --accent4: #f7c948;
+  --accent5: #e05c7a;
+  --accent6: #f4874b;
+  --text: #e8ecf5;
+  --text2: #8a94b0;
+  --text3: #5a6280;
+  --class-bg: #1a1428;
+  --class-border: #3d2d6b;
+  --study-bg: #0d1e1a;
+  --study-border: #1e5248;
+  --empty-bg: #12141c;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ─── HEADER ─── */
+header {
+  background: linear-gradient(135deg, #0f1117 0%, #1a1f35 50%, #0f1117 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 28px 32px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.header-title h1 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-title p {
+  font-size: 0.8rem;
+  color: var(--text2);
+  font-weight: 400;
+}
+
+.header-stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 16px;
+}
+
+.stat-chip .num {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent4);
+}
+
+.stat-chip .lbl {
+  font-size: 0.65rem;
+  color: var(--text3);
+}
+
+/* ─── WEEK TABS ─── */
+.week-tabs {
+  max-width: 1400px;
+  margin: 20px auto 0;
+  padding: 0 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.tab-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 24px;
+  color: var(--text2);
+  font-family: 'Vazirmatn', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-color: transparent;
+  color: #fff;
+}
+
+.tab-btn:hover:not(.active) {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* ─── LEGEND ─── */
+.legend {
+  max-width: 1400px;
+  margin: 14px auto 0;
+  padding: 0 20px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--text2);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+/* ─── GRID ─── */
+.main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.week-panel { display: none; }
+.week-panel.active { display: block; }
+
+.grid-wrap {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+th {
+  background: var(--surface);
+  padding: 14px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text2);
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+th.day-th {
+  color: var(--accent4);
+  font-size: 0.85rem;
+}
+
+td {
+  vertical-align: top;
+  padding: 6px;
+  border: 1px solid var(--border);
+  min-height: 60px;
+  min-width: 120px;
+}
+
+tr:last-child td { border-bottom: none; }
+
+/* time column */
+.time-col {
+  background: var(--surface);
+  text-align: center;
+  padding: 10px 8px;
+  color: var(--text3);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 80px;
+  vertical-align: middle;
+}
+
+/* row header */
+.row-header {
+  background: var(--surface);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text2);
+  text-align: center;
+  vertical-align: middle;
+  min-width: 80px;
+  padding: 8px;
+}
+
+/* ─── CARDS ─── */
+.card {
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  min-height: 54px;
+  position: relative;
+  transition: transform 0.15s;
+}
+
+.card:hover { transform: translateY(-1px); }
+
+/* class card (fixed schedule) */
+.card-class {
+  background: var(--class-bg);
+  border: 1px solid var(--class-border);
+  color: #c4b5f8;
+}
+
+.card-class .card-time {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #a78bfa;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.card-class .card-subject {
+  color: #e0d9ff;
+  font-weight: 600;
+}
+
+.card-class .card-tag {
+  display: inline-block;
+  background: rgba(124,92,191,0.25);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.62rem;
+  color: #c4b5f8;
+  margin-top: 3px;
+}
+
+/* study card */
+.card-study {
+  background: var(--study-bg);
+  border: 1px solid var(--study-border);
+  color: #a7f3d0;
+}
+
+.card-study .card-time {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #34d399;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.card-study .card-subject {
+  color: #d1fae5;
+  font-weight: 600;
+}
+
+.card-study .card-type {
+  display: inline-block;
+  font-size: 0.62rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-top: 3px;
+}
+
+.type-motale { background: rgba(52,211,153,0.15); color: #6ee7b7; }
+.type-test   { background: rgba(251,191,36,0.15);  color: #fcd34d; }
+.type-morur  { background: rgba(99,102,241,0.15);  color: #a5b4fc; }
+.type-event  { background: rgba(239,68,68,0.15);   color: #fca5a5; }
+
+/* empty cell */
+.cell-empty {
+  background: var(--empty-bg);
+  border-radius: 8px;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-dash {
+  color: var(--text3);
+  font-size: 1rem;
+  opacity: 0.3;
+}
+
+/* subject color accent strip */
+.card::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  border-radius: 2px 0 0 2px;
+}
+
+.subj-math::before    { background: #4f8ef7; }
+.subj-farsi::before   { background: #f4874b; }
+.subj-science::before { background: #3dbfa0; }
+.subj-arabic::before  { background: #f7c948; }
+.subj-payam::before   { background: #e05c7a; }
+.subj-social::before  { background: #9f7aea; }
+.subj-intel::before   { background: #68d391; }
+.subj-class::before   { background: #7c5cbf; }
+
+/* subject badge */
+.subj-badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  padding: 0px 5px;
+  border-radius: 3px;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.badge-math    { background: rgba(79,142,247,0.2);  color: #93c5fd; }
+.badge-farsi   { background: rgba(244,135,75,0.2);  color: #fdba74; }
+.badge-science { background: rgba(61,191,160,0.2);  color: #6ee7b7; }
+.badge-arabic  { background: rgba(247,201,72,0.2);  color: #fde68a; }
+.badge-payam   { background: rgba(224,92,122,0.2);  color: #fca5a5; }
+.badge-social  { background: rgba(159,122,234,0.2); color: #c4b5f8; }
+.badge-intel   { background: rgba(104,211,145,0.2); color: #a7f3d0; }
+
+/* multi-card in one cell */
+.multi { display: flex; flex-direction: column; gap: 4px; }
+
+/* ─── FOOTER ─── */
+footer {
+  text-align: center;
+  padding: 24px;
+  color: var(--text3);
+  font-size: 0.72rem;
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+
+/* ─── CHECKBOX ─── */
+.card-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.card-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 5px;
+  border: 2px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  margin-top: 2px;
+  position: relative;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.card-checkbox:checked {
+  background: var(--accent3);
+  border-color: var(--accent3);
+}
+
+.card-checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.card-class .card-checkbox:checked {
+  background: var(--accent2);
+  border-color: var(--accent2);
+}
+
+.card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.card.done .card-subject {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.card.done .card-time {
+  opacity: 0.45;
+}
+
+.card.done {
+  opacity: 0.6;
+}
+
+/* ─── NEW INTERACTIVE FEATURES ─── */
+.controls {
+  max-width: 1400px;
+  margin: 14px auto 0;
+  padding: 0 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ctrl-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 16px;
+  color: var(--text);
+  font-family: 'Vazirmatn', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ctrl-btn:hover, .ctrl-btn.active {
+  border-color: var(--accent);
+  background: rgba(79,142,247,0.15);
+  color: var(--accent);
+}
+
+.filter-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-chip.active, .filter-chip:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: transparent;
+}
+
+/* Timer Modal */
+.timer-modal {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 200;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  width: 280px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+}
+
+.timer-modal.show { display: block; }
+
+.timer-display {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--accent4);
+  margin: 10px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.timer-btn {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  font-family: 'Vazirmatn', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.timer-start { background: var(--accent3); color: #fff; }
+.timer-pause { background: var(--accent4); color: #000; }
+.timer-reset { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+
+.presets {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.preset-btn {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.preset-btn.active { background: var(--accent); color: #fff; border-color: transparent; }
+
+/* Notes Modal */
+.notes-modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 300;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+.notes-modal.show { display: block; }
+
+.notes-modal textarea {
+  width: 100%;
+  height: 180px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'Vazirmatn', sans-serif;
+  padding: 12px;
+  resize: vertical;
+  margin: 12px 0;
+}
+
+.notes-modal .modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.note-indicator {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.note-indicator:hover { opacity: 1; }
+.note-indicator.has-note { color: var(--accent4); opacity: 1; }
+
+/* Overlay for modals */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 250;
+  backdrop-filter: blur(4px);
+}
+
+.overlay.show { display: block; }
+
+/* Card improvements */
+.card { position: relative; }
+
+.card-study:hover .note-indicator { opacity: 1; }
+
+/* Subject filter active hide */
+.card.hidden { display: none !important; }
+
+/* Session Editor Modal */
+.session-modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 400;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+.session-modal.show { display: block; }
+
+.session-modal h3 {
+  margin-bottom: 16px;
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text2);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Vazirmatn', sans-serif;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row .form-group { flex: 1; }
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.btn-danger {
+  background: var(--accent5) !important;
+  border-color: var(--accent5) !important;
+}
+
+/* Card action buttons */
+.card-actions {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.card:hover .card-actions { opacity: 1; }
+
+.card-action-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-action-btn:hover { background: var(--accent); }
+
+/* Drag handle */
+.drag-handle {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  cursor: grab;
+  opacity: 0.4;
+  font-size: 0.8rem;
+  color: var(--text3);
+}
+
+.card:hover .drag-handle { opacity: 1; }
+
+.card.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+.drop-zone {
+  min-height: 20px;
+  border: 2px dashed transparent;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.drop-zone.drag-over {
+  border-color: var(--accent);
+  background: rgba(79,142,247,0.1);
+}
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.celebrate { animation: bounce 0.6s ease; }
+
+/* Responsive timer */
+@media (max-width: 600px) {
+  .timer-modal { width: calc(100% - 40px); left: 20px; right: 20px; }
+}
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #0d1e1a;
+  background: var(--accent4);
+  border-radius: 4px;
+  padding: 1px 8px;
+  margin-top: 4px;
+}
+.card-study .card-time {
+  direction: ltr;
+  display: inline-block;
+  background: rgba(0,0,0,0.25);
+  border-radius: 4px;
+  padding: 1px 8px;
+}
+.suggested-time {
+  display: inline-block;
+  font-size: 0.65rem;
+  color: var(--accent4);
+  font-weight: 600;
+  background: rgba(247,201,72,0.1);
+  border: 1px solid rgba(247,201,72,0.25);
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-bottom: 2px;
+}
+
+</style>
+</head>
+<body>
+
+<nav style="display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-bottom:1px solid #2a3050; background:#0f1117; position:sticky; top:0; z-index:200; font-family:'Vazirmatn',sans-serif;">
+  <div style="font-weight:900; background:linear-gradient(135deg,#4f8ef7,#7c5cbf); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">📚 دیجی ماز</div>
+  <div>
+    <a href="index.html" style="color:#8a94b0; text-decoration:none; margin-left:16px; font-size:0.82rem; font-weight:600;">خانه</a>
+    <a href="schedule.html" style="color:#4f8ef7; text-decoration:none; margin-left:16px; font-size:0.82rem; font-weight:600;">برنامه مطالعاتی</a>
+    <a href="progress.html" style="color:#8a94b0; text-decoration:none; margin-left:16px; font-size:0.82rem; font-weight:600;">پیشرفت من</a>
+    <a href="contact.html" style="color:#8a94b0; text-decoration:none; font-size:0.82rem; font-weight:600;">ارتباط با ما</a>
+    <span id="dm-auth" style="margin-right:6px"></span>
+  </div>
+</nav>
+<div id="dm-online-bar" style="max-width:1400px;margin:10px auto 0;padding:0 20px;font-size:.72rem;color:#8a94b0">🟢 در حال اتصال به سرور…</div>
+<div id="dm-admin-sessions" style="max-width:1400px;margin:8px auto 0;padding:0 20px;"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="header-title">
+      <h1>📚 برنامه مطالعاتی آزمون ۱۳ آذر ماز</h1>
+      <p>علوم تفکیکی • ۳۰ آبان تا ۱۳ آذر ۱۴۰۵ • هر لقمه ۳۰ تا ۶۰ دقیقه • ساعت شروع تا پایان + مدت زمان • شروع از ۱۳:۳۰</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-chip"><span class="num">۵۱</span><span class="lbl">کل لقمه زمان‌دار</span></div>
+      <div class="stat-chip"><span class="num">۵۳</span><span class="lbl">کل زنگ</span></div>
+      <div class="stat-chip"><span class="num">۱۴</span><span class="lbl">روز</span></div>
+      <div class="stat-chip"><span class="num">۲</span><span class="lbl">هفته</span></div>
+      <div class="stat-chip"><span class="num" id="done-count">۰/۰</span><span class="lbl">تکمیل‌شده</span></div>
+      <div class="stat-chip"><span class="num" id="progress-stat">۰%</span><span class="lbl">پیشرفت</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="week-tabs">
+  <button class="tab-btn active" onclick="switchWeek(1)">هفته اول — ۳۰ آبان تا ۶ آذر</button>
+  <button class="tab-btn" onclick="switchWeek(2)">هفته دوم — ۷ آذر تا ۱۳ آذر</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#7c5cbf;"></div> کلاس (ثابت — از تصویر)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#3dbfa0;"></div> مطالعه (از PDF)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f7c948;"></div> تست آموزشی</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#9f7aea;"></div> مرور فصل</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#e05c7a;"></div> رویداد ویژه</div>
+</div>
+
+<div class="controls">
+  <div class="filter-bar" id="filter-bar">
+    <span class="filter-chip active" data-filter="all">همه</span>
+    <span class="filter-chip" data-filter="math">ریاضی</span>
+    <span class="filter-chip" data-filter="farsi">فارسی</span>
+    <span class="filter-chip" data-filter="science">علوم</span>
+    <span class="filter-chip" data-filter="arabic">عربی</span>
+    <span class="filter-chip" data-filter="payam">پیام‌ها</span>
+    <span class="filter-chip" data-filter="social">مطالعات</span>
+    <span class="filter-chip" data-filter="intel">استعداد</span>
+    <span class="filter-chip" data-filter="class">کلاس</span>
+  </div>
+  <button class="ctrl-btn" onclick="toggleTimer()">⏱ تایمر مطالعه</button>
+  <button class="ctrl-btn" onclick="togglePending()">✅ فقط ناتمام</button>
+  <button class="ctrl-btn" onclick="showStats()">📊 آمار جزئی</button>
+  <button class="ctrl-btn" onclick="exportProgress()">💾 خروجی</button>
+  <button class="ctrl-btn" onclick="openAddSessionModal()">➕ اضافه کردن جلسه</button>
+  <button class="ctrl-btn" onclick="sortAllDays()">🔄 مرتب‌سازی زمانی</button>
+  <button class="ctrl-btn" onclick="resetProgress()">🔄 ریست</button>
+</div>
+
+<div class="main">
+
+<!-- ══════════ WEEK 1 ══════════ -->
+<div class="week-panel active" id="week1">
+  <div class="grid-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ساعت</th>
+        <th class="day-th">شنبه<br><small style="color:var(--text3)">۳۰ آبان</small></th>
+        <th class="day-th">یکشنبه<br><small style="color:var(--text3)">۱ آذر</small></th>
+        <th class="day-th">دوشنبه<br><small style="color:var(--text3)">۲ آذر</small></th>
+        <th class="day-th">سه‌شنبه<br><small style="color:var(--text3)">۳ آذر</small></th>
+        <th class="day-th">چهارشنبه<br><small style="color:var(--text3)">۴ آذر</small></th>
+        <th class="day-th">پنجشنبه<br><small style="color:var(--text3)">۵ آذر</small></th>
+        <th class="day-th">جمعه<br><small style="color:var(--text3)">۶ آذر</small></th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- ROW: Class times from image - kept empty as per instruction -->
+      <tr>
+        <td class="time-col">کلاس‌های<br>ثابت</td>
+        <!-- شنبه: زیست‌شناسی ۴:۴۵–۶ و زبان ۶:۳۰–۷:۴۵ و علوم Hi20 ۷:۴۵–۹ -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۴۵ – ۱۸:۰۰</span>
+              <span class="card-subject">زیست‌شناسی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۸:۳۰ – ۱۹:۴۵</span>
+              <span class="card-subject">زبان Hi۲۰</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۹:۴۵ – ۲۱:۰۰</span>
+              <span class="card-subject">علوم Hi۲۰</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+        <!-- یکشنبه: فیزیک ۳:۱۵–۴:۳۰ و زمین‌شناسی ۴:۴۵–۶:۱۵ و کانون زبان ۴:۴۵–۶:۱۵ -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۵:۱۵ – ۱۶:۳۰</span>
+              <span class="card-subject">فیزیک</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۴۵ – ۱۸:۱۵</span>
+              <span class="card-subject">زمین‌شناسی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۴۵ – ۱۸:۱۵</span>
+              <span class="card-subject">کانون زبان</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+        <!-- دوشنبه: شیمی ۳:۱۵–۴:۳۰ و عربی ۷:۴۵–۸:۴۵ -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۵:۱۵ – ۱۶:۳۰</span>
+              <span class="card-subject">شیمی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۹:۴۵ – ۲۰:۴۵</span>
+              <span class="card-subject">عربی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+        <!-- سه‌شنبه: کانون زبان ۴:۴۵–۶:۱۵ و فارسی ۸:۱۵–۹:۱۵ و پیام‌ها ۳:۱۵–۴:۳۰ -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۵:۱۵ – ۱۶:۳۰</span>
+              <span class="card-subject">پیام‌ها</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۴۵ – ۱۸:۱۵</span>
+              <span class="card-subject">کانون زبان</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۲۰:۱۵ – ۲۱:۱۵</span>
+              <span class="card-subject">فارسی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+        <!-- چهارشنبه: ریاضی Hi20 ۴:۴۵–۶ -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۴۵ – ۱۸:۰۰</span>
+              <span class="card-subject">ریاضی Hi۲۰</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+        <!-- پنجشنبه: ریاضی ۸–۹:۳۰ و مطالعات ۴:۳۰–۵:۴۵ و استعداد ۵:۴۵–۸ -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۳۰ – ۱۷:۴۵</span>
+              <span class="card-subject">مطالعات</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۷:۴۵ – ۲۰:۰۰</span>
+              <span class="card-subject">استعداد تحلیلی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۲۰:۰۰ – ۲۱:۳۰</span>
+              <span class="card-subject">ریاضی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+        <!-- جمعه: زیست‌شناسی ۳:۱۵–۴:۳۰ -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۵:۱۵ – ۱۶:۳۰</span>
+              <span class="card-subject">زیست‌شناسی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+      </tr>
+
+      <!-- ROW: 13:30 مطالعه (PDF content) -->
+      <tr>
+        <td class="time-col">از<br>۱۳:۳۰</td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-math">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:30</span><br>
+            <span class="card-subject">استدلال و اثبات در هندسه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-math">ریاضی نهم</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-math">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:15</span><br>
+            <span class="card-subject">استدلال — تست آموزشی</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-math">ریاضی</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:15 تا 15:15</span><br>
+            <span class="card-subject">مواد و نقش آن‌ها در زندگی</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-science">علوم (شیمی)</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+<div class="card card-study subj-social">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">18:30 تا 19:00</span><br>
+            <span class="card-subject">سیاره‌ی ما، زمین — تست</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-social">مطالعات اجتماعی</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-intel">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">19:00 تا 19:30</span><br>
+            <span class="card-subject">هوش کلامی — تیپ واژه‌سازی</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-intel">استعداد</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-social">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">19:30 تا 20:15</span><br>
+            <span class="card-subject">سیاره‌ی ما، زمین — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-social">مطالعات اجتماعی</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:15</span><br>
+            <span class="card-subject">مواد و نقش آن‌ها — تست</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-science">علوم (شیمی)</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-intel">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:15 تا 14:45</span><br>
+            <span class="card-subject">هوش ریاضی — الگویابی عددی</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-intel">استعداد</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-farsi">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">16:45 تا 17:30</span><br>
+            <span class="card-subject">این جهان راه است — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-farsi">فارسی نهم</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">17:30 تا 18:30</span><br>
+            <span class="card-subject">رفتار اتم‌ها با یکدیگر</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-science">علوم (شیمی)</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+<div class="card card-study subj-farsi">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">18:30 تا 19:15</span><br>
+            <span class="card-subject">مثل آیینه، کار و شایستگی</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-farsi">فارسی نهم</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-farsi">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:00</span><br>
+            <span class="card-subject">مثل آیینه — تست آموزشی</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-farsi">فارسی نهم</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-intel">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:00 تا 14:30</span><br>
+            <span class="card-subject">هوش کلامی — ترتیب منطقی</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-intel">استعداد</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-intel">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:00</span><br>
+            <span class="card-subject">هوش ریاضی — الگویابی جدولی</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-intel">استعداد</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-payam">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:00 تا 14:45</span><br>
+            <span class="card-subject">راهنمایان الهی — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-payam">پیام‌های آسمان</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-intel">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:45 تا 15:30</span><br>
+            <span class="card-subject">۳۰ تست ترکیبی و خلاقانه (پارت ۱)</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-intel">استعداد</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-farsi">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">15:30 تا 16:00</span><br>
+            <span class="card-subject">این جهان راه است — تست</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-farsi">فارسی نهم</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-math">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">18:15 تا 19:15</span><br>
+            <span class="card-subject">آشنایی با اثبات در هندسه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-math">ریاضی نهم</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-math">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:15</span><br>
+            <span class="card-subject">اثبات در هندسه — تست</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-math">ریاضی نهم</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:15 تا 15:00</span><br>
+            <span class="card-subject">رفتار اتم‌ها — تست</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-science">علوم (شیمی)</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-intel">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">15:00 تا 15:30</span><br>
+            <span class="card-subject">هوش کلامی — درک مطلب</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-intel">استعداد</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-social">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">15:30 تا 16:15</span><br>
+            <span class="card-subject">سنگ‌کره، آب‌کره، هواکره</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-social">مطالعات اجتماعی</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-intel">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">21:30 تا 22:00</span><br>
+            <span class="card-subject">هوش ریاضی — الگویابی هندسی</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-intel">استعداد</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-payam">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">22:00 تا 22:30</span><br>
+            <span class="card-subject">راهنمایان الهی — تست</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-payam">پیام‌های آسمان</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:30</span><br>
+            <span class="card-subject">حرکت چیست؟ — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-science">علوم (فیزیک)</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:30 تا 15:15</span><br>
+            <span class="card-subject">حرکت چیست؟ — تست</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-science">علوم (فیزیک)</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-social">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">16:30 تا 17:00</span><br>
+            <span class="card-subject">سنگ‌کره، آب‌کره — تست</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-social">مطالعات اجتماعی</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-intel">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">17:00 تا 17:30</span><br>
+            <span class="card-subject">هوش کلامی — نتیجه‌گیری</span><br>
+            <span class="card-type type-test">تست آموزشی</span>
+            <span class="subj-badge badge-intel">استعداد</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-farsi">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">17:30 تا 18:15</span><br>
+            <span class="card-subject">باغبان نیک‌اندیش — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-farsi">فارسی نهم</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-payam">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">18:15 تا 19:00</span><br>
+            <span class="card-subject">بود روشنگر راه سعادت</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-payam">پیام‌های آسمان</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+</div>
+        </td>
+
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ══════════ WEEK 2 ══════════ -->
+<div class="week-panel" id="week2">
+  <div class="grid-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ساعت</th>
+        <th class="day-th">شنبه<br><small style="color:var(--text3)">۷ آذر</small></th>
+        <th class="day-th">یکشنبه<br><small style="color:var(--text3)">۸ آذر</small></th>
+        <th class="day-th">دوشنبه<br><small style="color:var(--text3)">۹ آذر</small></th>
+        <th class="day-th">سه‌شنبه<br><small style="color:var(--text3)">۱۰ آذر</small></th>
+        <th class="day-th">چهارشنبه<br><small style="color:var(--text3)">۱۱ آذر</small></th>
+        <th class="day-th">پنجشنبه<br><small style="color:var(--text3)">۱۲ آذر</small></th>
+        <th class="day-th" style="color: var(--accent5);">جمعه<br><small>۱۳ آذر 🎯</small></th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- کلاس‌های ثابت هفته ۲ -->
+      <tr>
+        <td class="time-col">کلاس‌های<br>ثابت</td>
+
+        <!-- شنبه -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۴۵ – ۱۸:۰۰</span>
+              <span class="card-subject">زیست‌شناسی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۸:۳۰ – ۱۹:۴۵</span>
+              <span class="card-subject">زبان Hi۲۰</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۹:۴۵ – ۲۱:۰۰</span>
+              <span class="card-subject">علوم Hi۲۰</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+
+        <!-- یکشنبه -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۵:۱۵ – ۱۶:۳۰</span>
+              <span class="card-subject">فیزیک</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۴۵ – ۱۸:۱۵</span>
+              <span class="card-subject">زمین‌شناسی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۴۵ – ۱۸:۱۵</span>
+              <span class="card-subject">کانون زبان</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+
+        <!-- دوشنبه -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۵:۱۵ – ۱۶:۳۰</span>
+              <span class="card-subject">شیمی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۹:۴۵ – ۲۰:۴۵</span>
+              <span class="card-subject">عربی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+
+        <!-- سه‌شنبه -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۵:۱۵ – ۱۶:۳۰</span>
+              <span class="card-subject">پیام‌ها</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۴۵ – ۱۸:۱۵</span>
+              <span class="card-subject">کانون زبان</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۲۰:۱۵ – ۲۱:۱۵</span>
+              <span class="card-subject">فارسی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+
+        <!-- چهارشنبه -->
+        <td>
+          <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">۱۶:۴۵ – ۱۸:۰۰</span>
+            <span class="card-subject">ریاضی Hi۲۰</span>
+            <span class="card-tag">کلاس</span>
+          </div></div>
+</div>
+        </td>
+
+        <!-- پنجشنبه -->
+        <td>
+          <div class="multi">
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۶:۳۰ – ۱۷:۴۵</span>
+              <span class="card-subject">مطالعات</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۱۷:۴۵ – ۲۰:۰۰</span>
+              <span class="card-subject">استعداد تحلیلی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+            <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+              <span class="card-time">۲۰:۰۰ – ۲۱:۳۰</span>
+              <span class="card-subject">ریاضی</span>
+              <span class="card-tag">کلاس</span>
+            </div></div>
+</div>
+          </div>
+        </td>
+
+        <!-- جمعه (آزمون) -->
+        <td>
+          <div class="card card-class subj-class">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">۱۵:۱۵ – ۱۶:۳۰</span>
+            <span class="card-subject">زیست‌شناسی</span>
+            <span class="card-tag">کلاس</span>
+          </div></div>
+</div>
+        </td>
+      </tr>
+
+      <!-- مطالعه هفته ۲ -->
+      <tr>
+        <td class="time-col">از<br>۱۳:۳۰</td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-math">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:30</span><br>
+            <span class="card-subject">هم‌نهشتی مثلث‌ها — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-math">ریاضی نهم</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+<div class="card card-study subj-farsi">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:30 تا 15:15</span><br>
+            <span class="card-subject">هم‌نشین — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-farsi">فارسی نهم</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">15:15 تا 16:00</span><br>
+            <span class="card-subject">زیست‌کره، تنوع شگفت‌انگیز</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-science">علوم (زیست)</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:30</span><br>
+            <span class="card-subject">نیرو — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-science">علوم (فیزیک)</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+<div class="card card-study subj-arabic">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:30 تا 15:15</span><br>
+            <span class="card-subject">متن و قواعد درس ۳</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-arabic">عربی نهم</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-math">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">18:30 تا 19:30</span><br>
+            <span class="card-subject">عددهای حقیقی — مرور فصل</span><br>
+            <span class="card-type type-morur">مرور فصل</span>
+            <span class="subj-badge badge-math">ریاضی نهم</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-farsi">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:15</span><br>
+            <span class="card-subject">دریچه‌های شکوفایی — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-farsi">فارسی نهم</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-social">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:15 تا 15:00</span><br>
+            <span class="card-subject">ساکنان سیاره‌ی زمین — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-social">مطالعات اجتماعی</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-farsi">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">16:30 تا 17:15</span><br>
+            <span class="card-subject">زیبایی آفرینش — مرور فصل</span><br>
+            <span class="card-type type-morur">مرور فصل</span>
+            <span class="subj-badge badge-farsi">فارسی نهم</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">17:15 تا 18:00</span><br>
+            <span class="card-subject">زمین‌ساخت ورقه‌ای — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-science">علوم (زمین)</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-math">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">18:00 تا 19:00</span><br>
+            <span class="card-subject">مجموعه‌ها — مرور فصل</span><br>
+            <span class="card-type type-morur">مرور فصل</span>
+            <span class="subj-badge badge-math">ریاضی نهم</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-payam">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:15</span><br>
+            <span class="card-subject">خورشید پنهان — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-payam">پیام‌های آسمان</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:15 تا 15:00</span><br>
+            <span class="card-subject">آثاری از گذشته‌ی زمین — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-science">علوم (زمین)</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-arabic">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">18:30 تا 19:00</span><br>
+            <span class="card-subject">تمرین درس ۳</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-arabic">عربی نهم</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-arabic">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:15</span><br>
+            <span class="card-subject">درس ۲ — مرور فصل</span><br>
+            <span class="card-type type-morur">مرور فصل</span>
+            <span class="subj-badge badge-arabic">عربی نهم</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-payam">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:15 تا 15:00</span><br>
+            <span class="card-subject">خداشناسی — مرور فصل</span><br>
+            <span class="card-type type-morur">مرور فصل</span>
+            <span class="subj-badge badge-payam">پیام‌های آسمان</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-payam">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">15:00 تا 15:30</span><br>
+            <span class="card-subject">در صراط مستقیم — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-payam">پیام‌های آسمان</span><br>
+            <span class="duration">⏱ 30 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-science">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">15:30 تا 16:15</span><br>
+            <span class="card-subject">نگاهی به فضا — مطالعه</span><br>
+            <span class="card-type type-motale">مطالعه</span>
+            <span class="subj-badge badge-science">علوم (زمین)</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+<div class="card card-study subj-arabic">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">18:15 تا 19:00</span><br>
+            <span class="card-subject">درس ۱ — مرور فصل</span><br>
+            <span class="card-type type-morur">مرور فصل</span>
+            <span class="subj-badge badge-arabic">عربی نهم</span><br>
+            <span class="duration">⏱ 45 دقیقه</span>
+          </div></div>
+</div>
+</div>
+        </td>
+        <!-- روز بازسازی‌شده -->
+        <td>
+          <div class="multi">
+<div class="card card-study subj-payam" style="border-color: var(--accent5); background: rgba(224,92,122,0.1);">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">13:30 تا 14:30</span><br>
+            <span class="card-subject">🔥 پیش‌آزمون</span><br>
+            <span class="card-type type-event">رویداد ویژه</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+<div class="card card-study subj-payam" style="border-color: var(--accent4); background: rgba(247,201,72,0.08);">
+  <div class="card-inner"><input type="checkbox" class="card-checkbox" onclick="toggleDone(this)"><div class="card-content">
+            <span class="card-time">14:30 تا 15:30</span><br>
+            <span class="card-subject">✨ معجزه شب آزمون</span><br>
+            <span class="card-type type-event">رویداد ویژه</span><br>
+            <span class="duration">⏱ 1 ساعت</span>
+          </div></div>
+</div>
+</div>
+        </td>
+
+        <!-- جمعه ۱۳ آذر: آزمون! -->
+        <td style="background: rgba(224,92,122,0.05);">
+          <div class="card card-study" style="border-color: var(--accent5); background: rgba(224,92,122,0.12); min-height: 90px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+            <span style="font-size: 2rem;">🎯</span>
+            <span class="card-subject" style="color: #fca5a5; font-size: 0.85rem;">آزمون ۱۳ آذر ماز</span><br>
+            <span class="card-type type-event">رویداد ویژه</span>
+          </div>
+        </td>
+
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- Timer Modal -->
+<div class="timer-modal" id="timer-modal">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <strong style="color:var(--accent4);">⏱ تایمر مطالعه</strong>
+    <button onclick="toggleTimer()" style="background:none; border:none; color:var(--text3); font-size:1.2rem; cursor:pointer;">×</button>
+  </div>
+  <div class="presets">
+    <button class="preset-btn active" data-min="30" onclick="setPreset(30, this)">۳۰</button>
+    <button class="preset-btn" data-min="45" onclick="setPreset(45, this)">۴۵</button>
+    <button class="preset-btn" data-min="60" onclick="setPreset(60, this)">۱ ساعت</button>
+  </div>
+  <div class="timer-display" id="timer-display">۳۰:۰۰</div>
+  <div id="timer-task" style="text-align:center; font-size:0.75rem; color:var(--text2); min-height:20px; margin-bottom:8px;"></div>
+  <div class="timer-controls">
+    <button class="timer-btn timer-start" id="timer-start-btn" onclick="startTimer()">شروع</button>
+    <button class="timer-btn timer-pause" id="timer-pause-btn" onclick="pauseTimer()" style="display:none;">توقف</button>
+    <button class="timer-btn timer-reset" onclick="resetTimer()">ریست</button>
+  </div>
+</div>
+
+<!-- Session Editor Modal -->
+<div class="session-modal" id="session-modal">
+  <h3 id="session-modal-title">➕ افزودن جلسه مطالعه</h3>
+  <div class="form-group">
+    <label>موضوع جلسه</label>
+    <input type="text" id="session-subject" placeholder="مثلاً: استدلال و اثبات در هندسه">
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label>ساعت شروع</label>
+      <input type="time" id="session-start" value="13:30">
+    </div>
+    <div class="form-group">
+      <label>ساعت پایان</label>
+      <input type="time" id="session-end" value="14:15">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label>نوع</label>
+      <select id="session-type">
+        <option value="motale">مطالعه</option>
+        <option value="test">تست آموزشی</option>
+        <option value="morur">مرور فصل</option>
+        <option value="event">رویداد ویژه</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>درس</label>
+      <select id="session-subject-type">
+        <option value="math">ریاضی</option>
+        <option value="farsi">فارسی</option>
+        <option value="science">علوم</option>
+        <option value="arabic">عربی</option>
+        <option value="payam">پیام‌های آسمان</option>
+        <option value="social">مطالعات اجتماعی</option>
+        <option value="intel">استعداد تحلیلی</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>یادداشت (اختیاری)</label>
+    <textarea id="session-note" rows="2" placeholder="نکات اضافی..."></textarea>
+  </div>
+  <div class="modal-actions">
+    <button class="ctrl-btn" onclick="closeSessionModal()">انصراف</button>
+    <button class="ctrl-btn btn-danger" id="session-delete-btn" onclick="deleteCurrentSession()" style="display:none;">حذف</button>
+    <button class="ctrl-btn" style="background:var(--accent3); border-color:var(--accent3);" onclick="saveSession()">ذخیره</button>
+  </div>
+</div>
+
+<!-- Notes Modal -->
+<div class="overlay" id="overlay" onclick="closeAllModals()"></div>
+<div class="notes-modal" id="notes-modal">
+  <h3 style="margin-bottom:8px; color:var(--accent);">📝 یادداشت جلسه</h3>
+  <div id="notes-subject" style="font-size:0.85rem; color:var(--text2); margin-bottom:8px;"></div>
+  <textarea id="notes-textarea" placeholder="یادداشت خود را اینجا بنویسید... (خلاصه، نکات مهم، سوالات و...)"></textarea>
+  <div class="modal-actions">
+    <button class="ctrl-btn" onclick="closeNotes()">انصراف</button>
+    <button class="ctrl-btn" style="background:var(--accent3); border-color:var(--accent3);" onclick="saveNotes()">ذخیره</button>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<footer>
+  دیجی ماز • همراه مسیر مطالعه تو • برنامه ۲ هفته‌ای آزمون ۱۳ آذر ۱۴۰۵ • هر لقمه ۳۰ تا ۶۰ دقیقه<br>
+  <small style="color:var(--text3);">✨ قابلیت‌ها: ویرایش/حذف/اضافه جلسه با پنجره • جابه‌جایی با درگ • مرتب‌سازی زمانی • تایمر ۳۰/۴۵/۶۰ • فیلتر • یادداشت • آمار</small>
+</footer>
+
+<script src="api.js"></script>
+<script>
+// === DigiMaz online sync (added) ===
+(function(){
+  const bar = document.getElementById('dm-online-bar');
+  // 1) apply site config
+  if(window.DigiMazAPI && DigiMazAPI.renderAuthWidget) DigiMazAPI.renderAuthWidget();
+  if(!DigiMazAPI.loggedIn && bar) bar.innerHTML = '🔑 <a href="login.html" style="color:#4f8ef7;font-weight:700">وارد شو</a> تا پیشرفتت جداگانه ذخیره شود — الان حالت مهمان هستی';
+  DigiMazAPI.initPublic().then(cfg=>{
+    if(bar && DigiMazAPI.loggedIn) bar.innerHTML = '🟢 متصل به سرور — پیشرفتت با حساب <b>'+((DigiMazAPI.student||{}).name||'')+'</b> ذخیره می‌شود';
+    if(cfg && cfg.contact && cfg.contact.formspree){ window.__FORMSPREE = cfg.contact.formspree; }
+  }).catch(()=>{ if(bar) bar.innerHTML = '🟡 حالت آفلاین — تغییرات روی همین دستگاه ذخیره می‌شود'; });
+  // 2) load admin extra sessions
+  DigiMazAPI.getAdminSessions().then(list=>{
+    if(!list || !list.length) return;
+    const box = document.getElementById('dm-admin-sessions');
+    const groups = {};
+    list.forEach(s=>{ (groups[s.day]=groups[s.day]||[]).push(s); });
+    let html = '<div style="background:#181c27;border:1px solid #2a3050;border-radius:12px;padding:14px;font-size:.8rem"><b style="color:#3dbfa0">📌 جلسات اضافه‌شده توسط مدیر ('+list.length+')</b>';
+    const dayNames=['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه۲','یکشنبه۲','دوشنبه۲','سه‌شنبه۲','چهارشنبه۲','پنجشنبه۲','جمعه۲'];
+    for(const [day,arr] of Object.entries(groups)){
+      html += '<div style="margin-top:8px;color:#8a94b0">روز '+day+' ('+(dayNames[day-1]||'')+'): '+arr.map(s=>' <span style="background:#1e2335;border:1px solid #2a3050;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📚 '+s.subject+' <small>'+(s.start||'')+'–'+(s.end||'')+'</small></span>').join('')+'</div>';
+    }
+    html += '</div>';
+    box.innerHTML = html;
+  });
+  // 3) wrap saveProgress -> also push to server (debounced)
+  let t=null;
+  const origSave = window.saveProgress;
+  window.saveProgress = function(){
+    if(origSave) origSave.apply(this, arguments);
+    clearTimeout(t);
+    t=setTimeout(async ()=>{
+      try{
+        const meta = JSON.parse(localStorage.getItem('mazSessionMeta')||'[]');
+        const notes = JSON.parse(localStorage.getItem('mazStudyNotes')||'{}');
+        const arr = JSON.parse(localStorage.getItem('mazStudyProgress')||'[]');
+        await DigiMazAPI.saveProgress(meta, notes, arr);
+      }catch(e){}
+    }, 800);
+  };
+  // 4) on load, pull server progress first then render
+  window.addEventListener('DOMContentLoaded', async ()=>{
+    try{
+      const remote = await DigiMazAPI.getProgress();
+      if(remote && remote.progressArr && remote.progressArr.length){
+        localStorage.setItem('mazStudyProgress', JSON.stringify(remote.progressArr));
+        if(remote.sessionMeta) localStorage.setItem('mazSessionMeta', JSON.stringify(remote.sessionMeta));
+        if(remote.notes) localStorage.setItem('mazStudyNotes', JSON.stringify(remote.notes));
+        if(typeof loadProgress==='function'){ /* re-apply checkboxes */ }
+      }
+    }catch(e){}
+  });
+})();
+</script>
+
+// ─── CORE PROGRESS ───
+function toggleDone(checkbox) {
+  const card = checkbox.closest('.card');
+  if (checkbox.checked) {
+    card.classList.add('done');
+    // Celebration if all study of day done
+    checkDayComplete(card);
+  } else {
+    card.classList.remove('done');
+  }
+  saveProgress();
+}
+
+function saveProgress() {
+  const checkboxes = document.querySelectorAll('.card-checkbox');
+  const state = Array.from(checkboxes).map(cb => cb.checked);
+  try { localStorage.setItem('mazStudyProgress', JSON.stringify(state)); } catch(e) {}
+
+  // ── Save rich structured metadata for progress.html ──
+  try {
+    const meta = [];
+    document.querySelectorAll('.card-study').forEach((card, i) => {
+      const subject = card.querySelector('.card-subject')?.textContent?.trim() || '';
+      const done = card.classList.contains('done');
+      const timeText = card.querySelector('.card-time')?.textContent || '';
+      // Detect subjectClass
+      let subjectClass = 'subj-math';
+      for (const cls of card.classList) {
+        if (cls.startsWith('subj-')) { subjectClass = cls; break; }
+      }
+      meta.push({ id: card.dataset.id || ('s'+i), subject, subjectClass, time: timeText, done });
+    });
+    localStorage.setItem('mazSessionMeta', JSON.stringify(meta));
+    localStorage.setItem('mazProgressTimestamp', new Date().toLocaleString('fa-IR'));
+  } catch(e) {}
+
+  updateStats();
+}
+
+function loadProgress() {
+  try {
+    const saved = localStorage.getItem('mazStudyProgress');
+    if (saved) {
+      const state = JSON.parse(saved);
+      const checkboxes = document.querySelectorAll('.card-checkbox');
+      checkboxes.forEach((cb, i) => {
+        if (state[i]) {
+          cb.checked = true;
+          cb.closest('.card').classList.add('done');
+        }
+      });
+    }
+  } catch(e) {}
+  updateStats();
+  initCards();
+}
+
+function updateStats() {
+  const all = document.querySelectorAll('.card-study .card-checkbox');
+  const done = document.querySelectorAll('.card-study .card-checkbox:checked');
+  const pct = all.length ? Math.round(done.length / all.length * 100) : 0;
+  const el = document.getElementById('progress-stat');
+  if (el) el.textContent = pct + '%';
+  const countEl = document.getElementById('done-count');
+  if (countEl) countEl.textContent = done.length + '/' + all.length;
+}
+
+function switchWeek(n) {
+  document.querySelectorAll('.week-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('week' + n).classList.add('active');
+  document.querySelectorAll('.tab-btn')[n - 1].classList.add('active');
+}
+
+// ─── CARD INIT & NOTES ───
+let notesData = {};
+try { notesData = JSON.parse(localStorage.getItem('mazStudyNotes') || '{}'); } catch(e) {}
+
+function initCards() {
+  document.querySelectorAll('.card-study').forEach((card, idx) => {
+    if (!card.dataset.id) {
+      card.dataset.id = 'study-' + idx;
+    }
+    const id = card.dataset.id;
+    
+    // Add drag handle if missing
+    if (!card.querySelector('.drag-handle')) {
+      const handle = document.createElement('span');
+      handle.className = 'drag-handle';
+      handle.title = 'جابه‌جایی';
+      handle.textContent = '⠿';
+      card.prepend(handle);
+    }
+    
+    // Add action buttons if missing
+    if (!card.querySelector('.card-actions')) {
+      const actions = document.createElement('div');
+      actions.className = 'card-actions';
+      actions.innerHTML = `
+        <button class="card-action-btn" onclick="openEditSession(this.closest('.card'))" title="ویرایش">✏️</button>
+        <button class="card-action-btn" onclick="deleteSession(this.closest('.card'))" title="حذف">🗑️</button>`;
+      card.prepend(actions);
+    }
+    
+    // Add note indicator
+    if (!card.querySelector('.note-indicator')) {
+      const ind = document.createElement('span');
+      ind.className = 'note-indicator';
+      ind.innerHTML = '📝';
+      ind.onclick = (e) => { e.stopPropagation(); openNotes(id, card); };
+      card.appendChild(ind);
+    }
+    
+    if (notesData[id]) {
+      card.querySelector('.note-indicator').classList.add('has-note');
+    }
+    
+    card.addEventListener('dblclick', () => {
+      const subj = card.querySelector('.card-subject')?.textContent || 'مطالعه';
+      startTimerForTask(subj);
+    });
+    
+    setupDrag(card);
+  });
+  
+  document.querySelectorAll('.card-class').forEach((card, idx) => {
+    card.dataset.id = 'class-' + idx;
+  });
+  
+  setupDropZones();
+}
+
+let currentNoteId = null;
+let currentNoteCard = null;
+
+function openNotes(id, card) {
+  currentNoteId = id;
+  currentNoteCard = card;
+  document.getElementById('notes-subject').textContent = card.querySelector('.card-subject')?.textContent || '';
+  document.getElementById('notes-textarea').value = notesData[id] || '';
+  document.getElementById('notes-modal').classList.add('show');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function closeAllModals() {
+  closeNotes();
+  closeSessionModal();
+}
+
+function closeNotes() {
+  document.getElementById('notes-modal').classList.remove('show');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+function saveNotes() {
+  if (currentNoteId) {
+    const text = document.getElementById('notes-textarea').value.trim();
+    if (text) {
+      notesData[currentNoteId] = text;
+      currentNoteCard.querySelector('.note-indicator').classList.add('has-note');
+    } else {
+      delete notesData[currentNoteId];
+      currentNoteCard.querySelector('.note-indicator').classList.remove('has-note');
+    }
+    localStorage.setItem('mazStudyNotes', JSON.stringify(notesData));
+  }
+  closeNotes();
+}
+
+// ─── FILTERS ───
+document.querySelectorAll('.filter-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    const filter = chip.dataset.filter;
+    applyFilter(filter);
+  });
+});
+
+function applyFilter(filter) {
+  document.querySelectorAll('.card').forEach(card => {
+    if (filter === 'all') {
+      card.classList.remove('hidden');
+      return;
+    }
+    const isMatch = card.classList.contains('subj-' + filter) || 
+                    (filter === 'class' && card.classList.contains('card-class')) ||
+                    (filter === 'science' && card.classList.contains('subj-science'));
+    card.classList.toggle('hidden', !isMatch);
+  });
+}
+
+let pendingOnly = false;
+function togglePending() {
+  pendingOnly = !pendingOnly;
+  document.querySelectorAll('.card-study').forEach(card => {
+    const isDone = card.classList.contains('done');
+    if (pendingOnly && isDone) {
+      card.classList.add('hidden');
+    } else if (!pendingOnly) {
+      // re-apply current filter
+      const active = document.querySelector('.filter-chip.active');
+      if (active) applyFilter(active.dataset.filter);
+    }
+  });
+}
+
+// ─── TIMER (POMODORO) ───
+let timerInterval = null;
+let timerSeconds = 30 * 60;
+let isRunning = false;
+let currentTask = '';
+
+function toggleTimer() {
+  document.getElementById('timer-modal').classList.toggle('show');
+}
+
+function setPreset(mins, btn) {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  timerSeconds = mins * 60;
+  updateTimerDisplay();
+  if (isRunning) pauseTimer();
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timerSeconds / 60);
+  const s = timerSeconds % 60;
+  document.getElementById('timer-display').textContent = 
+    String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+function startTimer() {
+  if (isRunning) return;
+  isRunning = true;
+  document.getElementById('timer-start-btn').style.display = 'none';
+  document.getElementById('timer-pause-btn').style.display = 'block';
+  
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    updateTimerDisplay();
+    if (timerSeconds <= 0) {
+      clearInterval(timerInterval);
+      isRunning = false;
+      playBeep();
+      alert('🎉 زمان تمام شد! استراحت کن یا جلسه بعدی را شروع کن.');
+      resetTimer();
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timerInterval);
+  isRunning = false;
+  document.getElementById('timer-start-btn').style.display = 'block';
+  document.getElementById('timer-pause-btn').style.display = 'none';
+}
+
+function resetTimer() {
+  pauseTimer();
+  const activePreset = document.querySelector('.preset-btn.active');
+  const mins = activePreset ? parseInt(activePreset.dataset.min) : 30;
+  timerSeconds = mins * 60;
+  updateTimerDisplay();
+  document.getElementById('timer-task').textContent = '';
+}
+
+function startTimerForTask(subject) {
+  document.getElementById('timer-modal').classList.add('show');
+  document.getElementById('timer-task').textContent = '📌 ' + subject;
+  currentTask = subject;
+  // Auto set to 45 if not running
+  if (!isRunning) {
+    const btn45 = document.querySelector('.preset-btn[data-min="45"]');
+    if (btn45) setPreset(45, btn45);
+  }
+}
+
+function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 880;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.5);
+  } catch(e) {}
+}
+
+// ─── STATS & UTILS ───
+function showStats() {
+  const allStudy = document.querySelectorAll('.card-study');
+  const doneStudy = document.querySelectorAll('.card-study.done');
+  const bySubject = {};
+  
+  allStudy.forEach(card => {
+    const badge = card.querySelector('.subj-badge');
+    const subj = badge ? badge.textContent.trim() : 'سایر';
+    if (!bySubject[subj]) bySubject[subj] = { total: 0, done: 0 };
+    bySubject[subj].total++;
+    if (card.classList.contains('done')) bySubject[subj].done++;
+  });
+  
+  let msg = '📊 آمار پیشرفت:\n\n';
+  msg += `کل جلسات مطالعه: ${doneStudy.length}/${allStudy.length}\n\n`;
+  for (const [subj, data] of Object.entries(bySubject)) {
+    const pct = Math.round(data.done / data.total * 100);
+    msg += `${subj}: ${data.done}/${data.total} (${pct}%)\n`;
+  }
+  alert(msg);
+}
+
+function exportProgress() {
+  const data = {
+    progress: JSON.parse(localStorage.getItem('mazStudyProgress') || '[]'),
+    notes: notesData,
+    exportedAt: new Date().toLocaleString('fa-IR')
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'maz-study-progress.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function resetProgress() {
+  if (confirm('آیا مطمئنید می‌خواهید تمام پیشرفت و یادداشت‌ها را پاک کنید؟')) {
+    localStorage.removeItem('mazStudyProgress');
+    localStorage.removeItem('mazStudyNotes');
+    notesData = {};
+    document.querySelectorAll('.card-checkbox').forEach(cb => {
+      cb.checked = false;
+      cb.closest('.card').classList.remove('done');
+    });
+    document.querySelectorAll('.note-indicator').forEach(ind => ind.classList.remove('has-note'));
+    updateStats();
+  }
+}
+
+// ─── SESSION EDITOR ───
+let editingCard = null;
+let editingDayCell = null;
+
+const subjectMap = {
+  math: { class: 'subj-math', badge: 'badge-math', label: 'ریاضی' },
+  farsi: { class: 'subj-farsi', badge: 'badge-farsi', label: 'فارسی' },
+  science: { class: 'subj-science', badge: 'badge-science', label: 'علوم' },
+  arabic: { class: 'subj-arabic', badge: 'badge-arabic', label: 'عربی' },
+  payam: { class: 'subj-payam', badge: 'badge-payam', label: 'پیام‌ها' },
+  social: { class: 'subj-social', badge: 'badge-social', label: 'مطالعات' },
+  intel: { class: 'subj-intel', badge: 'badge-intel', label: 'استعداد' }
+};
+
+const typeMap = {
+  motale: { class: 'type-motale', label: 'مطالعه' },
+  test: { class: 'type-test', label: 'تست آموزشی' },
+  morur: { class: 'type-morur', label: 'مرور فصل' },
+  event: { class: 'type-event', label: 'رویداد ویژه' }
+};
+
+function openAddSession(dayCell) {
+  editingCard = null;
+  editingDayCell = dayCell;
+  document.getElementById('session-modal-title').textContent = '➕ افزودن جلسه مطالعه';
+  document.getElementById('session-delete-btn').style.display = 'none';
+  document.getElementById('session-subject').value = '';
+  document.getElementById('session-start').value = '13:30';
+  document.getElementById('session-end').value = '14:15';
+  document.getElementById('session-type').value = 'motale';
+  document.getElementById('session-subject-type').value = 'math';
+  document.getElementById('session-note').value = '';
+  document.getElementById('session-modal').classList.add('show');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function openAddSessionModal() {
+  const week = prompt('هفته را انتخاب کنید (1 یا 2):', '1');
+  const panel = document.getElementById('week' + (week === '2' ? '2' : '1'));
+  if (!panel) return;
+  
+  const dayNames = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
+  const dayIdx = parseInt(prompt('روز را انتخاب کنید (0=شنبه تا 6=جمعه):', '0')) || 0;
+  if (dayIdx < 0 || dayIdx > 6) return;
+  
+  const rows = panel.querySelectorAll('tbody tr');
+  const studyRow = rows[rows.length - 1];
+  const cells = studyRow.querySelectorAll('td');
+  if (dayIdx >= cells.length) return;
+  
+  openAddSession(cells[dayIdx]);
+}
+
+function openEditSession(card) {
+  editingCard = card;
+  editingDayCell = card.closest('td');
+  document.getElementById('session-modal-title').textContent = '✏️ ویرایش جلسه';
+  document.getElementById('session-delete-btn').style.display = 'block';
+  
+  const subject = card.querySelector('.card-subject')?.textContent || '';
+  const timeText = card.querySelector('.card-time')?.textContent || '';
+  const typeEl = card.querySelector('.card-type');
+  const badgeEl = card.querySelector('.subj-badge');
+  
+  document.getElementById('session-subject').value = subject;
+  
+  // Parse time
+  const timeMatch = timeText.match(/(\d{1,2}:\d{2})\s*تا\s*(\d{1,2}:\d{2})/);
+  if (timeMatch) {
+    document.getElementById('session-start').value = timeMatch[1].padStart(5, '0');
+    document.getElementById('session-end').value = timeMatch[2].padStart(5, '0');
+  }
+  
+  // Detect type
+  let typeKey = 'motale';
+  if (typeEl) {
+    if (typeEl.classList.contains('type-test')) typeKey = 'test';
+    else if (typeEl.classList.contains('type-morur')) typeKey = 'morur';
+    else if (typeEl.classList.contains('type-event')) typeKey = 'event';
+  }
+  document.getElementById('session-type').value = typeKey;
+  
+  // Detect subject
+  let subjKey = 'math';
+  for (const [key, val] of Object.entries(subjectMap)) {
+    if (card.classList.contains(val.class)) { subjKey = key; break; }
+  }
+  document.getElementById('session-subject-type').value = subjKey;
+  
+  // Load note
+  const id = card.dataset.id;
+  document.getElementById('session-note').value = notesData[id] || '';
+  
+  document.getElementById('session-modal').classList.add('show');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function closeSessionModal() {
+  document.getElementById('session-modal').classList.remove('show');
+  document.getElementById('overlay').classList.remove('show');
+  editingCard = null;
+  editingDayCell = null;
+}
+
+function saveSession() {
+  const subject = document.getElementById('session-subject').value.trim();
+  if (!subject) { alert('موضوع جلسه را وارد کنید'); return; }
+  
+  const start = document.getElementById('session-start').value;
+  const end = document.getElementById('session-end').value;
+  const typeKey = document.getElementById('session-type').value;
+  const subjKey = document.getElementById('session-subject-type').value;
+  const note = document.getElementById('session-note').value.trim();
+  
+  const typeInfo = typeMap[typeKey];
+  const subjInfo = subjectMap[subjKey];
+  
+  // Calculate duration
+  const [sh, sm] = start.split(':').map(Number);
+  const [eh, em] = end.split(':').map(Number);
+  const durationMins = (eh * 60 + em) - (sh * 60 + sm);
+  const durationText = durationMins >= 60 ? Math.floor(durationMins/60) + ' ساعت' : durationMins + ' دقیقه';
+  
+  const timeText = `${start} تا ${end}`;
+  
+  if (editingCard) {
+    // Update existing
+    editingCard.className = `card card-study ${subjInfo.class}`;
+    editingCard.querySelector('.card-subject').textContent = subject;
+    editingCard.querySelector('.card-time').textContent = timeText;
+    const typeSpan = editingCard.querySelector('.card-type');
+    typeSpan.className = `card-type ${typeInfo.class}`;
+    typeSpan.textContent = typeInfo.label;
+    const badge = editingCard.querySelector('.subj-badge');
+    badge.className = `subj-badge ${subjInfo.badge}`;
+    badge.textContent = subjInfo.label;
+    editingCard.querySelector('.duration').textContent = `⏱ ${durationText}`;
+    
+    // Update note
+    const id = editingCard.dataset.id;
+    if (note) {
+      notesData[id] = note;
+      editingCard.querySelector('.note-indicator')?.classList.add('has-note');
+    } else {
+      delete notesData[id];
+      editingCard.querySelector('.note-indicator')?.classList.remove('has-note');
+    }
+    localStorage.setItem('mazStudyNotes', JSON.stringify(notesData));
+  } else {
+    // Create new
+    const card = createSessionCard(subject, timeText, typeInfo, subjInfo, durationText, note);
+    let multi = editingDayCell.querySelector('.multi');
+    if (!multi) {
+      multi = document.createElement('div');
+      multi.className = 'multi';
+      editingDayCell.appendChild(multi);
+    }
+    multi.appendChild(card);
+    initSingleCard(card);
+    sortDaySessions(editingDayCell);
+  }
+  
+  saveAllSessions();
+  closeSessionModal();
+}
+
+function createSessionCard(subject, timeText, typeInfo, subjInfo, durationText, note) {
+  const card = document.createElement('div');
+  card.className = `card card-study ${subjInfo.class}`;
+  card.innerHTML = `
+    <span class="drag-handle" title="جابه‌جایی">⠿</span>
+    <div class="card-actions">
+      <button class="card-action-btn" onclick="openEditSession(this.closest('.card'))" title="ویرایش">✏️</button>
+      <button class="card-action-btn" onclick="deleteSession(this.closest('.card'))" title="حذف">🗑️</button>
+    </div>
+    <div class="card-inner">
+      <input type="checkbox" class="card-checkbox" onclick="toggleDone(this)">
+      <div class="card-content">
+        <span class="card-time">${timeText}</span><br>
+        <span class="card-subject">${subject}</span><br>
+        <span class="card-type ${typeInfo.class}">${typeInfo.label}</span>
+        <span class="subj-badge ${subjInfo.badge}">${subjInfo.label}</span><br>
+        <span class="duration">⏱ ${durationText}</span>
+      </div>
+    </div>`;
+  return card;
+}
+
+function deleteSession(card) {
+  if (!confirm('این جلسه حذف شود؟')) return;
+  const id = card.dataset.id;
+  if (id && notesData[id]) {
+    delete notesData[id];
+    localStorage.setItem('mazStudyNotes', JSON.stringify(notesData));
+  }
+  card.remove();
+  saveAllSessions();
+}
+
+function deleteCurrentSession() {
+  if (editingCard) {
+    deleteSession(editingCard);
+    closeSessionModal();
+  }
+}
+
+function initSingleCard(card) {
+  const idx = document.querySelectorAll('.card-study').length;
+  const id = 'study-' + Date.now() + '-' + idx;
+  card.dataset.id = id;
+  
+  if (!card.querySelector('.note-indicator')) {
+    const ind = document.createElement('span');
+    ind.className = 'note-indicator';
+    ind.innerHTML = '📝';
+    ind.onclick = (e) => { e.stopPropagation(); openNotes(id, card); };
+    card.appendChild(ind);
+  }
+  
+  if (notesData[id]) {
+    card.querySelector('.note-indicator').classList.add('has-note');
+  }
+  
+  card.addEventListener('dblclick', () => {
+    const subj = card.querySelector('.card-subject')?.textContent || 'مطالعه';
+    startTimerForTask(subj);
+  });
+  
+  setupDrag(card);
+}
+
+// ─── DRAG & DROP ───
+function setupDrag(card) {
+  card.draggable = true;
+  card.addEventListener('dragstart', (e) => {
+    card.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', card.dataset.id || '');
+  });
+  card.addEventListener('dragend', () => {
+    card.classList.remove('dragging');
+    document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
+  });
+}
+
+function setupDropZones() {
+  document.querySelectorAll('td').forEach(cell => {
+    const multi = cell.querySelector('.multi') || cell;
+    multi.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      multi.classList.add('drag-over');
+    });
+    multi.addEventListener('dragleave', () => {
+      multi.classList.remove('drag-over');
+    });
+    multi.addEventListener('drop', (e) => {
+      e.preventDefault();
+      multi.classList.remove('drag-over');
+      const dragging = document.querySelector('.card.dragging');
+      if (dragging && dragging.closest('td') === cell) {
+        // Reorder within same cell
+        const afterElement = getDragAfterElement(multi, e.clientY);
+        if (afterElement) {
+          multi.insertBefore(dragging, afterElement);
+        } else {
+          multi.appendChild(dragging);
+        }
+        saveAllSessions();
+      }
+    });
+  });
+}
+
+function getDragAfterElement(container, y) {
+  const cards = [...container.querySelectorAll('.card-study:not(.dragging)')];
+  return cards.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) {
+      return { offset, element: child };
+    }
+    return closest;
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+// ─── SORT BY TIME ───
+function sortDaySessions(cell) {
+  const multi = cell.querySelector('.multi');
+  if (!multi) return;
+  const cards = [...multi.querySelectorAll('.card-study')];
+  cards.sort((a, b) => {
+    const ta = a.querySelector('.card-time')?.textContent || '';
+    const tb = b.querySelector('.card-time')?.textContent || '';
+    const ma = ta.match(/(\d{1,2}):(\d{2})/);
+    const mb = tb.match(/(\d{1,2}):(\d{2})/);
+    if (!ma || !mb) return 0;
+    return (parseInt(ma[1])*60 + parseInt(ma[2])) - (parseInt(mb[1])*60 + parseInt(mb[2]));
+  });
+  cards.forEach(c => multi.appendChild(c));
+}
+
+function sortAllDays() {
+  document.querySelectorAll('td').forEach(cell => sortDaySessions(cell));
+  saveAllSessions();
+}
+
+function saveAllSessions() {
+  // Progress is already saved via checkboxes
+  updateStats();
+}
+
+function checkDayComplete(card) {
+  const cell = card.closest('td');
+  if (!cell) return;
+  const studyCards = cell.querySelectorAll('.card-study');
+  const allDone = Array.from(studyCards).every(c => c.classList.contains('done'));
+  if (allDone && studyCards.length > 0) {
+    cell.style.animation = 'none';
+    setTimeout(() => {
+      cell.classList.add('celebrate');
+      setTimeout(() => cell.classList.remove('celebrate'), 600);
+    }, 10);
+  }
+}
+
+// Init
+window.addEventListener('DOMContentLoaded', () => {
+  loadProgress();
+  updateTimerDisplay();
+});
+
+// Keyboard shortcut: T for timer
+document.addEventListener('keydown', (e) => {
+  if (e.key === 't' && !e.target.matches('textarea, input')) {
+    toggleTimer();
+  }
+});
+</script>
+</body>
+</html>

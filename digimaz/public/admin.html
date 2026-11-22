@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پنل مدیریت | دیجی ماز (آنلاین)</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c14;--surface:#111520;--surface2:#181e2e;--surface3:#1e2640;--border:#252d48;--border2:#2f3a5c;--accent:#4f8ef7;--accent2:#7c5cbf;--accent3:#3dbfa0;--accent4:#f7c948;--accent5:#e05c7a;--text:#e8ecf5;--text2:#8a94b0;--text3:#4a5270}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;width:380px;max-width:100%;text-align:center}
+.login-box input{width:100%;margin-bottom:12px;text-align:center;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;padding:10px}
+.login-err{color:var(--accent5);font-size:.8rem;margin-top:8px;display:none}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap;gap:8px}
+.topbar-logo{font-weight:900;font-size:1.1rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.topbar-badge{background:rgba(61,191,160,.15);border:1px solid rgba(61,191,160,.3);color:var(--accent3);font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:20px}
+.layout{display:flex;flex:1;min-height:0}
+.sidebar{width:215px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);padding:12px 0;overflow-y:auto}
+.sidebar-section{padding:5px 10px;margin-top:6px}.sidebar-section-label{font-size:.6rem;color:var(--text3);font-weight:700;margin-bottom:5px}
+.sidebar-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;color:var(--text2);cursor:pointer;font-size:.82rem;font-weight:600;margin-bottom:2px}.sidebar-item:hover{background:var(--surface2);color:var(--text)}.sidebar-item.active{background:rgba(79,142,247,.12);color:var(--accent)}
+.sidebar-badge{margin-right:auto;background:var(--accent5);color:#fff;font-size:.6rem;font-weight:700;padding:1px 7px;border-radius:10px}
+.content{flex:1;overflow-y:auto;padding:24px;min-width:0}.panel{display:none}.panel.active{display:block}
+.panel-title{font-size:1.2rem;font-weight:900}.panel-sub{color:var(--text2);font-size:.82rem;margin:3px 0 16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px}
+.card-title{font-size:.88rem;font-weight:700;margin-bottom:14px}
+.form-row{display:flex;gap:12px;flex-wrap:wrap}.form-group{flex:1;min-width:180px;margin-bottom:12px}.form-group.full{flex:100%}
+label.fl{display:block;font-size:.7rem;color:var(--text2);font-weight:600;margin-bottom:4px}
+input[type=text],input[type=email],input[type=url],input[type=password],input[type=number],textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;padding:9px 12px;font-size:.85rem}input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}textarea{resize:vertical;min-height:70px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:none;font-family:inherit;font-weight:700;font-size:.82rem;cursor:pointer}.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}.btn-danger{background:transparent;border:1px solid var(--accent5);color:var(--accent5)}.btn-danger:hover{background:rgba(224,92,122,.1)}.btn-ghost{background:var(--surface2);border:1px solid var(--border);color:var(--text2)}.btn-sm{padding:5px 11px;font-size:.75rem}
+.data-table{width:100%;border-collapse:collapse;font-size:.8rem}.data-table th{background:var(--surface2);padding:9px 11px;text-align:right;color:var(--text2);font-size:.72rem}.data-table td{padding:9px 11px;border-bottom:1px solid var(--border)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px 16px}.stat-card .sc-num{font-size:1.6rem;font-weight:900}.stat-card .sc-lbl{font-size:.68rem;color:var(--text2);margin-top:2px}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface3);border:1px solid var(--border2);border-radius:11px;padding:11px 20px;font-size:.83rem;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}#toast.show{opacity:1}
+.prog-bar-bg{height:6px;background:#252d48;border-radius:3px;overflow:hidden;margin-top:5px}.prog-bar-fill{height:100%;border-radius:3px}
+.toggle{width:40px;height:22px;border-radius:11px;background:var(--surface3);border:1px solid var(--border);position:relative;cursor:pointer;flex-shrink:0}.toggle.on{background:var(--accent3)}.toggle::after{content:'';position:absolute;top:3px;right:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s}.toggle.on::after{transform:translateX(-18px)}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--border)}
+.save-status{font-size:.75rem;padding:4px 10px;border-radius:6px}.save-status.saving{color:var(--accent4);background:rgba(247,201,72,.1)}.save-status.saved{color:var(--accent3);background:rgba(61,191,160,.1)}.save-status.error{color:var(--accent5);background:rgba(224,92,122,.1)}
+.rt-dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);display:inline-block;animation:pulse 1.5s infinite}@keyframes pulse{50%{opacity:.4}}.rt-dot.off{background:var(--accent5);animation:none}
+.msg-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px}
+@media(max-width:640px){.sidebar{width:160px}.content{padding:14px}}
+</style>
+</head>
+<body>
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div style="font-size:2.5rem">🔐</div>
+    <div style="font-size:1.3rem;font-weight:900;margin-bottom:6px">پنل مدیریت دیجی ماز</div>
+    <div style="color:var(--text2);font-size:.85rem;margin-bottom:20px">نسخه آنلاین — متصل به API سرور</div>
+    <input type="password" id="admin-pwd" placeholder="رمز عبور مدیر">
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">ورود به پنل</button>
+    <div class="login-err" id="login-err">رمز اشتباه است</div>
+    <p style="font-size:.7rem;color:var(--text3);margin-top:12px">رمز را با متغیر محیطی <b>ADMIN_PASSWORD</b> روی سرور عوض کنید</p>
+    <p style="font-size:.7rem;color:var(--text3);margin-top:6px">API: <code id="api-hint">same-origin /api</code></p>
+  </div>
+</div>
+
+<div id="admin-shell" style="display:none;flex-direction:column;min-height:100vh">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="topbar-logo">📚 دیجی ماز</div>
+      <div class="topbar-badge">🟢 آنلاین + API</div>
+      <span class="rt-dot" id="rt-dot"></span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="save-status" id="save-status"></span>
+      <button class="btn btn-ghost btn-sm" onclick="location.href='index.html'">نمایش سایت</button>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()">خروج</button>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-section"><div class="sidebar-section-label">داشبورد</div>
+        <div class="sidebar-item active" onclick="nav('dashboard',this)">📊 داشبورد</div></div>
+      <div class="sidebar-section"><div class="sidebar-section-label">محتوای سایت</div>
+        <div class="sidebar-item" onclick="nav('site',this)">🏠 اطلاعات سایت</div>
+        <div class="sidebar-item" onclick="nav('contact',this)">📞 اطلاعات تماس</div></div>
+      <div class="sidebar-section"><div class="sidebar-section-label">برنامه مطالعاتی</div>
+        <div class="sidebar-item" onclick="nav('sessions',this)">📅 جلسات ویژه</div>
+        <div class="sidebar-item" onclick="nav('subjects',this)">📚 دروس و رنگ‌ها</div></div>
+      <div class="sidebar-section"><div class="sidebar-section-label">گزارش</div>
+        <div class="sidebar-item" onclick="nav('messages',this)">✉️ پیام‌ها <span class="sidebar-badge" id="msg-badge">0</span></div>
+        <div class="sidebar-item" onclick="nav('progress',this)">📈 پیشرفت</div>
+        <div class="sidebar-item" onclick="nav('students',this)">🎓 دانش‌آموزان <span class="sidebar-badge" id="st-badge">0</span></div></div>
+      <div class="sidebar-section"><div class="sidebar-section-label">سیستم</div>
+        <div class="sidebar-item" onclick="nav('settings',this)">⚙️ تنظیمات</div></div>
+    </div>
+    <div class="content">
+      <div class="panel active" id="panel-dashboard">
+        <div class="panel-title">📊 داشبورد مدیریت</div>
+        <div class="panel-sub">آمار زنده از API — هر ۱۰ ثانیه تازه‌سازی می‌شود</div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="sc-num" id="d-pct" style="color:var(--accent4)">—</div><div class="sc-lbl">پیشرفت کل</div></div>
+          <div class="stat-card"><div class="sc-num" id="d-done" style="color:var(--accent3)">—</div><div class="sc-lbl">جلسه تکمیل‌شده</div></div>
+          <div class="stat-card"><div class="sc-num" id="d-msgs" style="color:var(--accent5)">—</div><div class="sc-lbl">پیام دریافتی</div></div>
+          <div class="stat-card"><div class="sc-num" id="d-days" style="color:var(--accent)">—</div><div class="sc-lbl">روز تا آزمون</div></div>
+        </div>
+        <div class="card"><div class="card-title">📐 پیشرفت به تفکیک درس</div><div id="d-subject-bars">…</div></div>
+        <div class="card"><div class="card-title">✉️ آخرین پیام‌ها</div><div id="d-recent-msgs">…</div></div>
+      </div>
+
+      <div class="panel" id="panel-site">
+        <div class="panel-title">🏠 اطلاعات سایت</div>
+        <div class="panel-sub">ذخیره → بلافاصله در همه صفحات (index/schedule/progress/contact) اعمال می‌شود</div>
+        <div class="card"><div class="card-title">🎯 آزمون و برند</div>
+          <div class="form-row">
+            <div class="form-group"><label class="fl">نام آزمون</label><input type="text" id="si-exam-name"></div>
+            <div class="form-group"><label class="fl">تاریخ آزمون (میلادی YYYY-MM-DD)</label><input type="text" id="si-exam-date"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="fl">نام برند</label><input type="text" id="si-brand"></div>
+            <div class="form-group"><label class="fl">ایموجی لوگو</label><input type="text" id="si-logo"></div>
+          </div>
+          <div class="form-group full"><label class="fl">توضیح صفحه اصلی</label><textarea id="si-desc"></textarea></div>
+          <button class="btn btn-primary" onclick="saveSiteInfo()">💾 ذخیره و اعمال فوری</button>
+        </div>
+        <div class="card"><div class="card-title">🎨 رنگ‌بندی</div>
+          <div class="form-row">
+            <div class="form-group"><label class="fl">رنگ اصلی</label><input type="color" id="cl-1" value="#4f8ef7"></div>
+            <div class="form-group"><label class="fl">رنگ دوم</label><input type="color" id="cl-2" value="#7c5cbf"></div>
+            <div class="form-group"><label class="fl">رنگ سبز</label><input type="color" id="cl-3" value="#3dbfa0"></div>
+            <div class="form-group"><label class="fl">رنگ زرد</label><input type="color" id="cl-4" value="#f7c948"></div>
+          </div>
+          <button class="btn btn-primary" onclick="saveColors()">💾 ذخیره رنگ‌ها</button>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-contact">
+        <div class="panel-title">📞 اطلاعات تماس + فرم</div>
+        <div class="panel-sub">در contact.html نمایش داده می‌شود</div>
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group"><label class="fl">ایمیل</label><input type="email" id="ci-email"></div>
+            <div class="form-group"><label class="fl">تلگرام</label><input type="text" id="ci-telegram"></div>
+          </div>
+          <div class="form-group"><label class="fl">ساعات پاسخگویی</label><input type="text" id="ci-hours"></div>
+          <div class="form-group"><label class="fl">Formspree Endpoint (اختیاری — اگر خالی باشد پیام‌ها در همین سرور ذخیره می‌شوند)</label><input type="url" id="fs-ep" placeholder="https://formspree.io/f/xxxx"></div>
+          <button class="btn btn-primary" onclick="saveContactInfo()">💾 ذخیره</button>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-sessions">
+        <div class="panel-title">📅 جلسات ویژه (اضافه‌شده توسط مدیر)</div>
+        <div class="panel-sub">این جلسات در schedule.html به‌صورت خودکار نمایش داده می‌شوند</div>
+        <div class="card"><div class="card-title">➕ افزودن جلسه</div>
+          <div class="form-row">
+            <div class="form-group"><label class="fl">موضوع</label><input type="text" id="ns-subj"></div>
+            <div class="form-group"><label class="fl">درس</label><select id="ns-stype"><option value="subj-math">ریاضی</option><option value="subj-farsi">فارسی</option><option value="subj-science">علوم</option><option value="subj-arabic">عربی</option><option value="subj-payam">پیام‌ها</option><option value="subj-social">مطالعات</option><option value="subj-intel">استعداد</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="fl">روز (۱-۱۴)</label><input type="number" id="ns-day" min="1" max="14" value="1"></div>
+            <div class="form-group"><label class="fl">شروع</label><input type="text" id="ns-start" placeholder="13:30"></div>
+            <div class="form-group"><label class="fl">پایان</label><input type="text" id="ns-end" placeholder="14:30"></div>
+            <div class="form-group"><label class="fl">نوع</label><select id="ns-type"><option value="motale">مطالعه</option><option value="test">تست</option><option value="morur">مرور</option><option value="event">رویداد</option></select></div>
+          </div>
+          <button class="btn btn-primary" onclick="addSession()">➕ افزودن</button>
+        </div>
+        <div class="card"><div class="card-title">📋 جلسات ثبت‌شده</div><div id="sessions-list">…</div></div>
+      </div>
+
+      <div class="panel" id="panel-subjects">
+        <div class="panel-title">📚 دروس و رنگ‌ها</div>
+        <div class="panel-sub">در progress.html و schedule.html اعمال می‌شود</div>
+        <div class="card"><table class="data-table"><thead><tr><th>درس</th><th>رنگ</th><th>تعداد پیش‌فرض</th></tr></thead><tbody id="subj-table"></tbody></table>
+        <div style="margin-top:12px"><button class="btn btn-primary btn-sm" onclick="saveSubjects()">💾 ذخیره</button></div></div>
+      </div>
+
+      <div class="panel" id="panel-messages">
+        <div class="panel-title">✉️ پیام‌ها</div>
+        <div class="panel-sub">هر ۱۰ ثانیه تازه‌سازی می‌شود</div>
+        <div style="margin-bottom:12px"><button class="btn btn-danger btn-sm" onclick="clearMessages()">🗑️ پاک کردن همه</button></div>
+        <div id="messages-list">…</div>
+      </div>
+
+      <div class="panel" id="panel-progress">
+        <div class="panel-title">📈 پیشرفت</div>
+        <div class="panel-sub">با هر تیک در schedule.html به‌روز می‌شود</div>
+        <div class="card"><div class="card-title">خلاصه</div><div id="prog-summary">…</div></div>
+        <div class="card"><div class="card-title">به تفکیک درس</div><div id="prog-subjects"></div></div>
+        <div class="card"><div class="card-title">📝 یادداشت‌ها</div><div id="prog-notes"></div></div>
+      </div>
+
+      <div class="panel" id="panel-students">
+        <div class="panel-title">🎓 دانش‌آموزان</div>
+        <div class="panel-sub">هر دانش‌آموز حساب جدا و پیشرفت جدا دارد — مدیر همه را می‌بیند</div>
+        <div class="card"><div class="card-title">➕ ساخت حساب دانش‌آموز</div>
+          <div class="form-row">
+            <div class="form-group"><label class="fl">نام</label><input type="text" id="stu-name" placeholder="مثلاً: علی رضایی"></div>
+            <div class="form-group"><label class="fl">نام کاربری (انگلیسی)</label><input type="text" id="stu-user" placeholder="ali123" dir="ltr"></div>
+            <div class="form-group"><label class="fl">رمز اولیه</label><input type="text" id="stu-pass" placeholder="1234" dir="ltr"></div>
+          </div>
+          <button class="btn btn-primary" onclick="addStudent()">➕ ساخت حساب</button>
+        </div>
+        <div class="card"><div class="card-title">📋 لیست دانش‌آموزان</div><div id="students-list">…</div></div>
+      </div>
+
+      <div class="panel" id="panel-settings">
+        <div class="panel-title">⚙️ تنظیمات</div>
+        <div class="panel-sub">قابلیت‌های صفحه اصلی</div>
+        <div class="card">
+          <div class="settings-row"><div><h4>نمایش کنتداون</h4></div><div class="toggle on" id="tog-countdown" onclick="toggleSetting('countdown',this)"></div></div>
+          <div class="settings-row"><div><h4>نمایش آمار زنده</h4></div><div class="toggle on" id="tog-livestats" onclick="toggleSetting('livestats',this)"></div></div>
+          <div class="settings-row"><div><h4>ثبت‌نام آزاد دانش‌آموز</h4><p style="font-size:.72rem;color:var(--text2)">اگر خاموش باشد فقط مدیر می‌تواند حساب بسازد</p></div><div class="toggle on" id="tog-allowRegister" onclick="toggleSetting('allowRegister',this)"></div></div>
+        </div>
+        <div class="card"><div class="card-title">💾 خروجی</div>
+          <button class="btn btn-primary" onclick="exportDB()">📥 دانلود JSON کل دیتابیس</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="api.js"></script>
+<script>
+const BASE = (window.DIGIMAZ_API_BASE || '');
+const A = p => BASE + p;
+let TOKEN = sessionStorage.getItem('dm_admin_token') || '';
+const H = () => ({ 'Content-Type': 'application/json', 'x-admin-token': TOKEN });
+const tf = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+const SUBJECTS_DEF = {
+  'subj-math':{name:'ریاضی',icon:'📐',color:'#4f8ef7',count:8},
+  'subj-farsi':{name:'فارسی',icon:'📖',color:'#f4874b',count:7},
+  'subj-science':{name:'علوم',icon:'🔬',color:'#3dbfa0',count:10},
+  'subj-arabic':{name:'عربی',icon:'🌙',color:'#f7c948',count:4},
+  'subj-payam':{name:'پیام‌ها',icon:'✨',color:'#e05c7a',count:5},
+  'subj-social':{name:'مطالعات',icon:'🌍',color:'#9f7aea',count:4},
+  'subj-intel':{name:'استعداد',icon:'🧠',color:'#68d391',count:8}
+};
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2500)}
+function status(s,m){const e=document.getElementById('save-status');e.className='save-status '+s;e.textContent=m;if(s==='saved')setTimeout(()=>{e.textContent='';e.className='save-status'},3500)}
+function nav(id,el){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');if(el)el.classList.add('active')}
+document.getElementById('admin-pwd').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+document.getElementById('api-hint').textContent = BASE ? BASE + '/api' : location.origin + '/api';
+async function doLogin(){
+  const pwd = document.getElementById('admin-pwd').value;
+  try {
+    const r = await fetch(A('/api/auth/login'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pwd})});
+    if(!r.ok) throw 0;
+    const j = await r.json();
+    TOKEN = j.token; sessionStorage.setItem('dm_admin_token',TOKEN);
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('admin-shell').style.display='flex';
+    initAdmin();
+  } catch(e){ document.getElementById('login-err').style.display='block'; }
+}
+function doLogout(){ sessionStorage.removeItem('dm_admin_token'); TOKEN=''; location.reload(); }
+async function apiGet(p){ const r=await fetch(A(p),{headers:H()}); if(!r.ok) throw new Error(r.status); return r.json(); }
+async function initAdmin(){ await refreshAll(); setInterval(refreshAll, 10000); }
+async function refreshAll(){
+  try {
+    const [cfg, stats, msgs, sessions, prog] = await Promise.all([
+      fetch(A('/api/config')).then(r=>r.json()),
+      fetch(A('/api/stats')).then(r=>r.json()),
+      apiGet('/api/admin/messages'),
+      fetch(A('/api/sessions')).then(r=>r.json()),
+      fetch(A('/api/progress')).then(r=>r.json())
+    ]);
+    document.getElementById('rt-dot').className='rt-dot';
+    fillConfig(cfg); renderStats(stats,cfg); renderMsgs(msgs); renderSessions(sessions); renderProgress(prog);
+    try { const students = await apiGet('/api/admin/students'); renderStudents(students); document.getElementById('st-badge').textContent = students.length; } catch(e){}
+  } catch(e){ document.getElementById('rt-dot').className='rt-dot off'; }
+}
+function fillConfig(cfg){
+  if(cfg.site){ si('si-exam-name',cfg.site.examName); si('si-exam-date',cfg.site.examDate); si('si-brand',cfg.site.brand); si('si-logo',cfg.site.logoEmoji); si('si-desc',cfg.site.heroDesc);
+    if(cfg.site.colors){ for(const k of ['1','2','3','4']){ const c=cfg.site.colors['cl'+k]; if(c) document.getElementById('cl-'+k).value=c; } } }
+  if(cfg.contact){ si('ci-email',cfg.contact.email); si('ci-telegram',cfg.contact.telegram); si('ci-hours',cfg.contact.hours); si('fs-ep',cfg.contact.formspree||''); }
+  if(cfg.settings){ setT('tog-countdown',cfg.settings.countdown!==false); setT('tog-livestats',cfg.settings.livestats!==false); if(document.getElementById('tog-allowRegister')) setT('tog-allowRegister',cfg.settings.allowRegister!==false); }
+  if(cfg.subjects) renderSubjectsTable(cfg.subjects);
+}
+function si(id,v){ const el=document.getElementById(id); if(el && document.activeElement!==el) el.value=v||''; }
+function setT(id,on){ const el=document.getElementById(id); el.classList.toggle('on',!!on); }
+function renderStats(s,cfg){
+  document.getElementById('d-pct').textContent=tf(s.pct)+'٪';
+  document.getElementById('d-done').textContent=tf(s.done)+'/'+tf(s.total);
+  document.getElementById('d-msgs').textContent=tf(s.messages);
+  let exam = new Date((cfg.site||{}).examDate||'2025-12-04');
+  document.getElementById('d-days').textContent=tf(Math.max(0,Math.ceil((exam-new Date())/86400000)));
+  document.getElementById('msg-badge').textContent=s.messages;
+}
+function renderMsgs(msgs){
+  const el=document.getElementById('messages-list');
+  el.innerHTML = msgs.length? msgs.map(m=>`<div class="msg-card"><div style="display:flex;justify-content:space-between"><b>${m.name||'—'}</b><span style="font-size:.7rem;color:var(--text3)">${m.dateStr||''}</span></div><div style="font-size:.78rem;color:var(--text2)">📞 ${m.contact||''} | 📂 ${m.subject||''}</div><div style="background:var(--surface);border-radius:7px;padding:9px;margin-top:6px;font-size:.83rem">${m.message||''}</div><div style="margin-top:8px"><button class="btn btn-danger btn-sm" onclick="delMsg('${m.id}')">حذف</button></div></div>`).join('') : '<p style="color:var(--text3)">پیامی نیست.</p>';
+  document.getElementById('d-recent-msgs').innerHTML = msgs.length? msgs.slice(0,3).map(m=>`<div style="border:1px solid var(--border);border-radius:9px;padding:10px;margin-bottom:8px;font-size:.82rem"><b>${m.name}</b> <span style="color:var(--text3);font-size:.7rem">${m.dateStr||''}</span><div style="color:var(--text2)">${(m.message||'').slice(0,100)}…</div></div>`).join('') : 'پیامی نیست.';
+}
+async function delMsg(id){ if(!confirm('حذف شود؟'))return; await fetch(A('/api/admin/messages/'+id),{method:'DELETE',headers:H()}); refreshAll(); }
+async function clearMessages(){ if(!confirm('همه پاک شود؟'))return; await fetch(A('/api/admin/messages'),{method:'DELETE',headers:H()}); refreshAll(); }
+function renderSessions(list){
+  document.getElementById('sessions-list').innerHTML = list.length? `<table class="data-table"><thead><tr><th>درس</th><th>موضوع</th><th>روز</th><th>ساعت</th><th></th></tr></thead><tbody>`+list.map(s=>{const c=SUBJECTS_DEF[s.subjectClass]||{};return `<tr><td>${c.icon||''} ${c.name||s.subjectClass}</td><td>${s.subject}</td><td>${tf(s.day)}</td><td>${s.start||''}–${s.end||''}</td><td><button class="btn btn-danger btn-sm" onclick="delSession('${s.id}')">حذف</button></td></tr>`}).join('')+`</tbody></table>` : 'جلسه‌ای نیست.';
+}
+async function addSession(){
+  const subject=document.getElementById('ns-subj').value.trim(); if(!subject){toast('⚠️ موضوع لازم است');return}
+  status('saving','در حال ذخیره…');
+  const r=await fetch(A('/api/admin/sessions'),{method:'POST',headers:H(),body:JSON.stringify({subject,subjectClass:document.getElementById('ns-stype').value,day:parseInt(document.getElementById('ns-day').value)||1,start:document.getElementById('ns-start').value,end:document.getElementById('ns-end').value,type:document.getElementById('ns-type').value})});
+  if(r.ok){status('saved','✓ ذخیره شد');document.getElementById('ns-subj').value='';refreshAll()} else status('error','خطا');
+}
+async function delSession(id){ if(!confirm('حذف شود؟'))return; await fetch(A('/api/admin/sessions/'+id),{method:'DELETE',headers:H()}); refreshAll(); }
+function renderSubjectsTable(saved){
+  document.getElementById('subj-table').innerHTML=Object.entries(SUBJECTS_DEF).map(([k,c])=>{const s=(saved||{})[k]||{};return `<tr><td>${c.icon} ${c.name}</td><td><input type="color" id="sc-${k}" value="${s.color||c.color}" style="width:46px"></td><td><input type="number" id="cnt-${k}" value="${s.count||c.count}" style="width:70px"></td></tr>`}).join('');
+}
+async function saveSubjects(){ const d={}; for(const k of Object.keys(SUBJECTS_DEF)){ d[k]={color:document.getElementById('sc-'+k).value,count:parseInt(document.getElementById('cnt-'+k).value)||SUBJECTS_DEF[k].count} } status('saving','…'); const r=await fetch(A('/api/admin/config/subjects'),{method:'PUT',headers:H(),body:JSON.stringify(d)}); status(r.ok?'saved':'error',r.ok?'✓ ذخیره شد':'خطا'); }
+async function saveSiteInfo(){ status('saving','…'); const body={examName:document.getElementById('si-exam-name').value,examDate:document.getElementById('si-exam-date').value,brand:document.getElementById('si-brand').value,logoEmoji:document.getElementById('si-logo').value,heroDesc:document.getElementById('si-desc').value}; const cur=await fetch(A('/api/config')).then(r=>r.json()); body.colors=cur.site.colors; const r=await fetch(A('/api/admin/config/site'),{method:'PUT',headers:H(),body:JSON.stringify(body)}); status(r.ok?'saved':'error',r.ok?'✓ اعمال شد':'خطا'); }
+async function saveColors(){ status('saving','…'); const cur=await fetch(A('/api/config')).then(r=>r.json()); const site={...(cur.site||{}),colors:{cl1:document.getElementById('cl-1').value,cl2:document.getElementById('cl-2').value,cl3:document.getElementById('cl-3').value,cl4:document.getElementById('cl-4').value}}; const r=await fetch(A('/api/admin/config/site'),{method:'PUT',headers:H(),body:JSON.stringify(site)}); status(r.ok?'saved':'error',r.ok?'✓ ذخیره شد':'خطا'); }
+async function saveContactInfo(){ status('saving','…'); const body={email:document.getElementById('ci-email').value,telegram:document.getElementById('ci-telegram').value,hours:document.getElementById('ci-hours').value,formspree:document.getElementById('fs-ep').value}; const r=await fetch(A('/api/admin/config/contact'),{method:'PUT',headers:H(),body:JSON.stringify(body)}); status(r.ok?'saved':'error',r.ok?'✓ ذخیره شد':'خطا'); }
+async function toggleSetting(key,el){ el.classList.toggle('on'); const on=el.classList.contains('on'); const cur=await fetch(A('/api/config')).then(r=>r.json()); const s={...(cur.settings||{})}; s[key]=on; await fetch(A('/api/admin/config/settings'),{method:'PUT',headers:H(),body:JSON.stringify(s)}); }
+function renderProgress(p){
+  const meta=p.sessionMeta||[]; const total=meta.length||46; const done=meta.filter(s=>s.done).length; const pct=total?Math.round(done/total*100):0;
+  document.getElementById('prog-summary').innerHTML=`<div class="stat-grid"><div class="stat-card"><div class="sc-num" style="color:var(--accent4)">${tf(pct)}٪</div><div class="sc-lbl">پیشرفت</div></div><div class="stat-card"><div class="sc-num" style="color:var(--accent3)">${tf(done)}</div><div class="sc-lbl">تکمیل</div></div><div class="stat-card"><div class="sc-num">${tf(total)}</div><div class="sc-lbl">کل</div></div></div><div class="prog-bar-bg" style="height:10px"><div class="prog-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,#4f8ef7,#3dbfa0)"></div></div>`;
+  const counts={}; for(const k of Object.keys(SUBJECTS_DEF)) counts[k]={t:SUBJECTS_DEF[k].count,d:0};
+  meta.forEach(s=>{ if(counts[s.subjectClass] && s.done) counts[s.subjectClass].d++; });
+  document.getElementById('prog-subjects').innerHTML=Object.entries(SUBJECTS_DEF).map(([k,c])=>{const o=counts[k];const q=Math.round(o.d/o.t*100);return `<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:.78rem"><span>${c.icon} ${c.name}</span><span>${tf(o.d)}/${tf(o.t)}</span></div><div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${q}%;background:${c.color}"></div></div></div>`}).join('');
+  document.getElementById('d-subject-bars').innerHTML=document.getElementById('prog-subjects').innerHTML;
+  const notes=p.notes||{}; const en=Object.entries(notes);
+  document.getElementById('prog-notes').innerHTML=en.length?en.map(([id,t])=>{const s=meta.find(x=>x.id===id);return `<div style="border:1px solid var(--border);border-radius:9px;padding:10px;margin-bottom:8px;font-size:.82rem"><div style="color:var(--text2);font-size:.7rem">${s?.subject||id}</div><div>${t}</div></div>`}).join(''):'یادداشتی نیست.';
+}
+async function addStudent(){
+  const name=document.getElementById('stu-name').value.trim(), user=document.getElementById('stu-user').value.trim(), pass=document.getElementById('stu-pass').value||'1234';
+  if(!name||!user){ toast('⚠️ نام و نام کاربری لازم است'); return; }
+  const r=await fetch(A('/api/admin/students'),{method:'POST',headers:H(),body:JSON.stringify({name,username:user,password:pass})});
+  if(r.ok){ toast('✅ حساب ساخته شد — رمز: '+pass); document.getElementById('stu-name').value=''; document.getElementById('stu-user').value=''; refreshAll(); }
+  else { const t=await r.text(); toast('❌ '+t); }
+}
+function renderStudents(list){
+  const el=document.getElementById('students-list');
+  if(!list.length){ el.innerHTML='<p style="color:var(--text3)">هنوز دانش‌آموزی ثبت‌نام نکرده.</p>'; return; }
+  el.innerHTML=`<table class="data-table"><thead><tr><th>نام</th><th>کاربری</th><th>پیشرفت</th><th>وضعیت</th><th></th></tr></thead><tbody>`+list.map(s=>`<tr>
+    <td><b>${s.name}</b><br><small style="color:var(--text3)">آخرین ورود: ${s.lastLogin?new Date(s.lastLogin).toLocaleString('fa-IR'):'—'}</small></td>
+    <td dir="ltr">${s.username}</td>
+    <td><div style="min-width:110px"><b style="color:var(--accent4)">${tf(s.pct)}٪</b> <small style="color:var(--text3)">${tf(s.done)}/${tf(s.total)}</small><div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${s.pct}%;background:linear-gradient(90deg,#4f8ef7,#3dbfa0)"></div></div></div></td>
+    <td>${s.active?'<span style="color:var(--accent3)">فعال</span>':'<span style="color:var(--accent5)">غیرفعال</span>'}</td>
+    <td style="white-space:nowrap"><button class="btn btn-ghost btn-sm" onclick="resetStudentProgress('${s.id}')">ریست</button> <button class="btn btn-ghost btn-sm" onclick="toggleStudent('${s.id}',${s.active?'false':'true'})">${s.active?'غیرفعال':'فعال'}</button> <button class="btn btn-danger btn-sm" onclick="delStudent('${s.id}')">حذف</button></td>
+  </tr>`).join('')+`</tbody></table>`;
+}
+async function delStudent(id){ if(!confirm('حساب و همه پیشرفت این دانش‌آموز حذف شود؟'))return; await fetch(A('/api/admin/students/'+id),{method:'DELETE',headers:H()}); refreshAll(); }
+async function resetStudentProgress(id){ if(!confirm('پیشرفت این دانش‌آموز صفر شود؟'))return; await fetch(A('/api/admin/students/'+id+'/reset-progress'),{method:'POST',headers:H()}); toast('✅ ریست شد'); refreshAll(); }
+async function toggleStudent(id,active){ await fetch(A('/api/admin/students/'+id),{method:'PUT',headers:H(),body:JSON.stringify({active})}); refreshAll(); }
+async function exportDB(){ const j=await apiGet('/api/admin/export'); const b=new Blob([JSON.stringify(j,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='digimaz-db.json'; a.click(); }
+if(TOKEN){ document.getElementById('login-screen').style.display='none'; document.getElementById('admin-shell').style.display='flex'; initAdmin(); }
+</script>
+</body>
+</html>

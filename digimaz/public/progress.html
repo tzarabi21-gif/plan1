@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>پیشرفت من | دیجی ماز</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #181c27;
+      --surface2: #1e2335;
+      --border: #2a3050;
+      --accent: #4f8ef7;
+      --accent2: #7c5cbf;
+      --accent3: #3dbfa0;
+      --accent4: #f7c948;
+      --accent5: #e05c7a;
+      --accent6: #f4874b;
+      --text: #e8ecf5;
+      --text2: #8a94b0;
+      --text3: #5a6280;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Vazirmatn', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ─── NAV (یکسان با بقیه صفحات) ─── */
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15,17,23,0.97);
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .logo {
+      font-weight: 900; font-size: 1.2rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-links a {
+      color: var(--text2); text-decoration: none;
+      padding: 6px 14px; border-radius: 8px;
+      font-weight: 600; font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-links a.active { color: var(--accent); background: rgba(79,142,247,0.1); }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 32px 20px; }
+
+    h1 {
+      font-size: 1.6rem; font-weight: 900; margin-bottom: 6px;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .subtitle { color: var(--text2); margin-bottom: 28px; font-size: 0.88rem; }
+
+    /* ─── Overall Card ─── */
+    .overall-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 36px; flex-wrap: wrap;
+    }
+    .progress-ring { width: 140px; height: 140px; position: relative; flex-shrink: 0; }
+    .progress-ring svg { transform: rotate(-90deg); }
+    .progress-ring circle { fill: none; stroke-width: 10; stroke-linecap: round; }
+    .progress-ring .bg { stroke: #2a3050; }
+    .progress-ring .fg {
+      stroke: url(#grad); stroke-dasharray: 377; stroke-dashoffset: 377;
+      transition: stroke-dashoffset 1s ease;
+    }
+    .ring-text {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .ring-pct { font-size: 1.9rem; font-weight: 900; color: var(--accent4); }
+    .ring-lbl { font-size: 0.65rem; color: var(--text3); }
+
+    .overall-right { flex: 1; min-width: 200px; }
+    .overall-title { font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+    .overall-stats { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
+    .stat-chip {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 18px; text-align: center;
+    }
+    .stat-chip .num { font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+    .stat-chip .lbl { font-size: 0.65rem; color: var(--text3); margin-top: 2px; }
+
+    /* mini subject bars inside overall card */
+    .mini-bars { display: flex; flex-direction: column; gap: 8px; }
+    .mini-bar-row { display: flex; align-items: center; gap: 10px; font-size: 0.75rem; }
+    .mini-bar-label { color: var(--text2); min-width: 110px; text-align: right; }
+    .mini-bar-track { flex: 1; height: 6px; background: #2a3050; border-radius: 3px; overflow: hidden; }
+    .mini-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+    .mini-bar-pct { color: var(--text3); min-width: 32px; font-size: 0.7rem; }
+
+    /* ─── Subject Cards Grid ─── */
+    .section-title {
+      font-size: 0.9rem; font-weight: 700; color: var(--text2);
+      margin-bottom: 14px; margin-top: 28px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    .subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+
+    .subject-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 18px;
+      transition: border-color 0.2s;
+    }
+    .subject-card:hover { border-color: var(--accent); }
+    .subject-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .subject-name { font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 7px; }
+    .subject-icon { font-size: 1.1rem; }
+    .subject-pct { font-size: 0.9rem; font-weight: 700; }
+    .bar-bg { height: 8px; background: #2a3050; border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 0.8s ease; }
+    .subject-detail { font-size: 0.72rem; color: var(--text3); margin-top: 7px; display: flex; justify-content: space-between; }
+
+    /* Completed sessions list */
+    .sessions-list { margin-top: 10px; }
+    .session-pill {
+      display: inline-block; font-size: 0.65rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 2px 8px; margin: 2px;
+      color: var(--text2);
+    }
+    .session-pill.done { border-color: var(--accent3); color: var(--accent3); background: rgba(61,191,160,0.08); }
+
+    /* ─── Empty State ─── */
+    .empty-state {
+      text-align: center; padding: 60px 20px; color: var(--text3);
+    }
+    .empty-state .emoji { font-size: 3rem; margin-bottom: 14px; }
+    .empty-state p { margin-bottom: 16px; }
+    .empty-state a {
+      display: inline-block; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; padding: 10px 24px; border-radius: 10px; text-decoration: none;
+      font-weight: 700; font-size: 0.9rem;
+    }
+
+    /* Reset button */
+    .reset-btn {
+      background: transparent; border: 1px solid var(--accent5);
+      color: var(--accent5); border-radius: 8px; padding: 7px 16px;
+      font-family: 'Vazirmatn', sans-serif; font-size: 0.8rem; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .reset-btn:hover { background: rgba(224,92,122,0.1); }
+
+    footer {
+      text-align: center; padding: 24px; color: var(--text3);
+      font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">📚 دیجی ماز</div>
+    <div class="nav-links">
+      <a href="index.html">خانه</a>
+      <a href="schedule.html">برنامه مطالعاتی</a>
+      <a href="progress.html" class="active">پیشرفت من</a>
+      <a href="contact.html">ارتباط با ما</a>
+    <span id="dm-auth" style="margin-right:6px"></span>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>پیشرفت مطالعاتی من</h1>
+    <p class="subtitle" id="last-updated">در حال بارگذاری داده‌های واقعی از برنامه مطالعاتی…</p>
+
+    <!-- Overall card -->
+    <div class="overall-card">
+      <div class="progress-ring">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4f8ef7"/>
+              <stop offset="100%" stop-color="#3dbfa0"/>
+            </linearGradient>
+          </defs>
+          <circle class="bg" cx="70" cy="70" r="60"/>
+          <circle class="fg" id="ring" cx="70" cy="70" r="60"/>
+        </svg>
+        <div class="ring-text">
+          <div class="ring-pct" id="overall-pct">۰٪</div>
+          <div class="ring-lbl">پیشرفت کل</div>
+        </div>
+      </div>
+
+      <div class="overall-right">
+        <div class="overall-title">خلاصه پیشرفت</div>
+        <div class="overall-stats">
+          <div class="stat-chip">
+            <div class="num" id="done-count">۰</div>
+            <div class="lbl">تکمیل‌شده</div>
+          </div>
+          <div class="stat-chip">
+            <div class="num" id="total-count">۰</div>
+            <div class="lbl">کل جلسات</div>
+          </div>
+          <div class="stat-chip">
+            <div class="num" id="remaining-count">۰</div>
+            <div class="lbl">باقی‌مانده</div>
+          </div>
+        </div>
+        <div class="mini-bars" id="mini-bars"></div>
+      </div>
+    </div>
+
+    <!-- Per-subject detailed grid -->
+    <div class="section-title">جزئیات به تفکیک درس</div>
+    <div class="subject-grid" id="subject-grid"></div>
+
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <div class="emoji">📖</div>
+      <p>هنوز هیچ جلسه‌ای تکمیل نشده است.</p>
+      <a href="schedule.html">برو به برنامه مطالعاتی</a>
+    </div>
+
+    <div style="margin-top: 32px; text-align: left;">
+      <button class="reset-btn" onclick="confirmReset()">🗑️ پاک کردن همه پیشرفت‌ها</button>
+    </div>
+  </div>
+
+  <footer>دیجی ماز • پیشرفت شما فقط روی همین دستگاه ذخیره می‌شود</footer>
+
+  <script>
+    // ─── Subject config (باید با schedule.html هماهنگ باشد) ───
+    const SUBJECT_CONFIG = {
+      'subj-math':    { name: 'ریاضی',              icon: '📐', color: '#4f8ef7' },
+      'subj-farsi':   { name: 'فارسی',              icon: '📖', color: '#f4874b' },
+      'subj-science': { name: 'علوم',               icon: '🔬', color: '#3dbfa0' },
+      'subj-arabic':  { name: 'عربی',               icon: '🌙', color: '#f7c948' },
+      'subj-payam':   { name: 'پیام‌های آسمان',     icon: '✨', color: '#e05c7a' },
+      'subj-social':  { name: 'مطالعات اجتماعی',   icon: '🌍', color: '#9f7aea' },
+      'subj-intel':   { name: 'استعداد تحلیلی',    icon: '🧠', color: '#68d391' },
+    };
+
+    function toFarsiNum(n) {
+      return String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+    }
+
+    function loadProgress() {
+      // ─── خواندن داده‌های واقعی از localStorage (همان کلید schedule.html) ───
+      let progressState = [];
+      let notesData = {};
+      let sessionMeta = []; // {id, subject, subjectClass, time, type, done}
+
+      try {
+        progressState = JSON.parse(localStorage.getItem('mazStudyProgress') || '[]');
+        notesData = JSON.parse(localStorage.getItem('mazStudyNotes') || '{}');
+        // Extended structured data saved by upgraded schedule.html
+        sessionMeta = JSON.parse(localStorage.getItem('mazSessionMeta') || '[]');
+      } catch(e) {}
+
+      const totalFromProgress = progressState.length;
+      const doneFromProgress = progressState.filter(Boolean).length;
+
+      // ─── Build subject breakdown از داده‌های structured ───
+      const subjects = {};
+      for (const key of Object.keys(SUBJECT_CONFIG)) {
+        subjects[key] = { total: 0, done: 0, sessions: [] };
+      }
+
+      if (sessionMeta.length > 0) {
+        // We have rich data from upgraded schedule
+        sessionMeta.forEach(s => {
+          const key = s.subjectClass;
+          if (!subjects[key]) subjects[key] = { total: 0, done: 0, sessions: [] };
+          subjects[key].total++;
+          if (s.done) subjects[key].done++;
+          subjects[key].sessions.push(s);
+        });
+      } else if (totalFromProgress > 0) {
+        // Fallback: distribute progress across subjects proportionally
+        // Based on hardcoded session counts in schedule.html
+        const knownCounts = {
+          'subj-math': 8, 'subj-farsi': 7, 'subj-science': 10,
+          'subj-arabic': 4, 'subj-payam': 5, 'subj-social': 4, 'subj-intel': 8
+        };
+        const keys = Object.keys(knownCounts);
+        const total = Object.values(knownCounts).reduce((a,b) => a+b, 0);
+        let doneLeft = doneFromProgress;
+        keys.forEach((key, i) => {
+          subjects[key].total = knownCounts[key];
+          if (i < keys.length - 1) {
+            const portion = Math.round(doneFromProgress * knownCounts[key] / total);
+            subjects[key].done = Math.min(portion, subjects[key].total);
+            doneLeft -= subjects[key].done;
+          } else {
+            subjects[key].done = Math.max(0, Math.min(doneLeft, subjects[key].total));
+          }
+        });
+      } else {
+        // No data at all
+        document.getElementById('empty-state').style.display = 'block';
+        document.getElementById('subject-grid').style.display = 'none';
+        document.getElementById('last-updated').textContent = 'هنوز هیچ جلسه‌ای تکمیل نشده است.';
+        document.getElementById('overall-pct').textContent = '۰٪';
+        document.getElementById('done-count').textContent = '۰';
+        document.getElementById('total-count').textContent = '۰';
+        document.getElementById('remaining-count').textContent = '۰';
+        return;
+      }
+
+      const totalAll = sessionMeta.length > 0
+        ? Object.values(subjects).reduce((a, s) => a + s.total, 0)
+        : totalFromProgress || 46;
+      const doneAll = sessionMeta.length > 0
+        ? Object.values(subjects).reduce((a, s) => a + s.done, 0)
+        : doneFromProgress;
+      const pct = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
+
+      // ─── Update overall ring ───
+      document.getElementById('overall-pct').textContent = toFarsiNum(pct) + '٪';
+      document.getElementById('done-count').textContent = toFarsiNum(doneAll);
+      document.getElementById('total-count').textContent = toFarsiNum(totalAll);
+      document.getElementById('remaining-count').textContent = toFarsiNum(totalAll - doneAll);
+
+      const circumference = 2 * Math.PI * 60;
+      document.getElementById('ring').style.strokeDashoffset = circumference - (pct / 100) * circumference;
+
+      // ─── Last updated ───
+      const ts = localStorage.getItem('mazProgressTimestamp');
+      document.getElementById('last-updated').textContent = ts
+        ? 'آخرین بروزرسانی: ' + ts
+        : 'داده‌های پیشرفت از برنامه مطالعاتی بارگذاری شد';
+
+      // ─── Mini bars (inside overall card) ───
+      const miniBarsEl = document.getElementById('mini-bars');
+      miniBarsEl.innerHTML = '';
+      for (const [key, cfg] of Object.entries(SUBJECT_CONFIG)) {
+        const s = subjects[key];
+        if (!s || s.total === 0) continue;
+        const p = Math.round(s.done / s.total * 100);
+        miniBarsEl.innerHTML += `
+          <div class="mini-bar-row">
+            <span class="mini-bar-label">${cfg.icon} ${cfg.name}</span>
+            <div class="mini-bar-track">
+              <div class="mini-bar-fill" style="width:${p}%; background:${cfg.color}"></div>
+            </div>
+            <span class="mini-bar-pct">${toFarsiNum(p)}٪</span>
+          </div>`;
+      }
+
+      // ─── Subject cards ───
+      const grid = document.getElementById('subject-grid');
+      grid.innerHTML = '';
+      let hasAny = false;
+
+      for (const [key, cfg] of Object.entries(SUBJECT_CONFIG)) {
+        const s = subjects[key];
+        if (!s || s.total === 0) continue;
+        hasAny = true;
+        const p = Math.round(s.done / s.total * 100);
+        const pColor = p >= 80 ? '#3dbfa0' : p >= 50 ? '#f7c948' : '#4f8ef7';
+
+        // Build session pills if we have meta
+        let pillsHtml = '';
+        if (s.sessions && s.sessions.length > 0) {
+          pillsHtml = `<div class="sessions-list">` +
+            s.sessions.map(sess =>
+              `<span class="session-pill ${sess.done ? 'done' : ''}">
+                ${sess.done ? '✓' : '○'} ${sess.subject || ''}
+              </span>`
+            ).join('') +
+          `</div>`;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'subject-card';
+        card.innerHTML = `
+          <div class="subject-header">
+            <span class="subject-name">
+              <span class="subject-icon">${cfg.icon}</span>
+              ${cfg.name}
+            </span>
+            <span class="subject-pct" style="color:${pColor}">${toFarsiNum(p)}٪</span>
+          </div>
+          <div class="bar-bg">
+            <div class="bar-fill" style="background:${cfg.color}; width:${p}%"></div>
+          </div>
+          <div class="subject-detail">
+            <span>${toFarsiNum(s.done)} از ${toFarsiNum(s.total)} جلسه تکمیل شد</span>
+            <span>${toFarsiNum(s.total - s.done)} باقی‌مانده</span>
+          </div>
+          ${pillsHtml}`;
+        grid.appendChild(card);
+      }
+
+      if (!hasAny || doneAll === 0) {
+        document.getElementById('empty-state').style.display = 'block';
+      }
+    }
+
+    function confirmReset() {
+      if (confirm('آیا مطمئنید؟ همه پیشرفت‌ها پاک می‌شوند!')) {
+        localStorage.removeItem('mazStudyProgress');
+        localStorage.removeItem('mazStudyNotes');
+        localStorage.removeItem('mazSessionMeta');
+        localStorage.removeItem('mazProgressTimestamp');
+        location.reload();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadProgress);
+  </script>
+<script src="api.js"></script>
+<script>
+(function(){ const orig=window.loadProgress; window.loadProgress=async function(){ try{ const remote=await DigiMazAPI.getProgress(); if(remote && (remote.sessionMeta?.length || remote.progressArr?.length)){ if(remote.sessionMeta?.length) localStorage.setItem("mazSessionMeta",JSON.stringify(remote.sessionMeta)); if(remote.notes) localStorage.setItem("mazStudyNotes",JSON.stringify(remote.notes)); if(remote.progressArr?.length) localStorage.setItem("mazStudyProgress",JSON.stringify(remote.progressArr)); } }catch(e){} return orig(); }; })();
+DigiMazAPI.initPublic(); DigiMazAPI.renderAuthWidget();
+(function(){ if(!DigiMazAPI.loggedIn){ const c=document.querySelector(".container"); if(c){ const d=document.createElement("div"); d.style.cssText="background:rgba(247,201,72,.1);border:1px solid #f7c948;border-radius:12px;padding:14px;margin-bottom:18px;font-size:.85rem;text-align:center"; d.innerHTML="🔑 برای ذخیره جداگانه پیشرفت، <a href='login.html' style='color:#4f8ef7;font-weight:700'>وارد حساب دانش‌آموزی شو</a> — الان داده‌های همین دستگاه نمایش داده می‌شود."; c.prepend(d); } } })();
+</script>
+</body>
+</html>

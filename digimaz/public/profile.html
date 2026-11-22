@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>پروفایل من | دیجی ماز</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1117;--surface:#181c27;--surface2:#1e2335;--border:#2a3050;--accent:#4f8ef7;--accent2:#7c5cbf;--accent3:#3dbfa0;--accent4:#f7c948;--accent5:#e05c7a;--text:#e8ecf5;--text2:#8a94b0;--text3:#5a6280}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+nav{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);background:rgba(15,17,23,.97);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.logo{font-weight:900;font-size:1.15rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:2px;align-items:center;flex-wrap:wrap}
+.nav-links a{color:var(--text2);text-decoration:none;padding:6px 12px;border-radius:8px;font-weight:600;font-size:.82rem}
+.nav-links a:hover,.nav-links a.active{color:var(--accent);background:rgba(79,142,247,.1)}
+.container{max-width:1100px;margin:0 auto;padding:20px 16px}
+.profile-header{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.profile-info h1{font-size:1.4rem;font-weight:900;margin-bottom:4px}
+.profile-info p{color:var(--text2);font-size:.85rem}
+.btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:10px;padding:8px 16px;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer}
+.btn-ghost{background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
+.btn-sm{padding:5px 12px;font-size:.78rem;border-radius:8px}
+/* Tabs like Chrome */
+.tabs-bar{display:flex;gap:4px;overflow-x:auto;padding:8px 0 4px;margin-bottom:16px;scrollbar-width:thin}
+.tab{background:var(--surface2);border:1px solid var(--border);border-bottom:none;border-radius:10px 10px 0 0;padding:8px 16px;font-size:.82rem;font-weight:600;color:var(--text2);cursor:pointer;white-space:nowrap;position:relative;min-width:90px;text-align:center}
+.tab.active{background:var(--surface);color:var(--accent);border-color:var(--accent);font-weight:700}
+.tab .close{margin-right:6px;opacity:.6;font-size:.7rem}
+.tab:hover .close{opacity:1}
+.add-tab{background:transparent;border:1px dashed var(--border);color:var(--accent);min-width:40px;padding:8px 12px}
+/* Plan content */
+.plan-view{background:var(--surface);border:1px solid var(--border);border-radius:0 16px 16px 16px;padding:20px;min-height:300px}
+.days-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.day-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px}
+.day-title{font-weight:700;font-size:.9rem;margin-bottom:8px;color:var(--accent4)}
+.session-item{background:var(--bg);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:.8rem;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.session-item .time{color:var(--accent3);font-weight:600;font-size:.75rem}
+.todo-section{margin-top:24px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px}
+.todo-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.todo-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent3)}
+.todo-item.done span{text-decoration:line-through;color:var(--text3)}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal.show{display:flex}
+.modal-content{background:var(--surface);border-radius:16px;padding:24px;width:100%;max-width:420px;border:1px solid var(--border)}
+.modal-content h3{margin-bottom:16px}
+label{display:block;font-size:.78rem;color:var(--text2);margin:10px 0 4px;font-weight:600}
+input,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px;font-family:inherit;font-size:.9rem}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.preset{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.78rem;cursor:pointer}
+.preset.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.empty{text-align:center;color:var(--text3);padding:40px 20px}
+@media (max-width:600px){
+  nav{padding:12px 12px}
+  .nav-links a{padding:6px 8px;font-size:.75rem}
+  .days-grid{grid-template-columns:1fr}
+  .profile-header{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">📚 دیجی ماز</div>
+  <div class="nav-links">
+    <a href="index.html">خانه</a>
+    <a href="schedule.html">برنامه مطالعاتی</a>
+    <a href="progress.html">پیشرفت</a>
+    <a href="contact.html">ارتباط</a>
+    <span id="dm-auth"></span>
+  </div>
+</nav>
+
+<div class="container" id="app">
+  <div class="empty">در حال بارگذاری پروفایل…</div>
+</div>
+
+<!-- Modals -->
+<div class="modal" id="create-modal">
+  <div class="modal-content">
+    <h3>➕ ساخت برنامه جدید</h3>
+    <label>نام برنامه</label>
+    <input id="new-name" placeholder="مثلاً برنامه هفته آخر" />
+    <label>مدت زمان</label>
+    <div class="presets">
+      <div class="preset" data-d="1">۱ روز</div>
+      <div class="preset" data-d="7">۱ هفته</div>
+      <div class="preset active" data-d="14">۲ هفته</div>
+      <div class="preset" data-d="30">۱ ماه</div>
+    </div>
+    <input type="number" id="new-duration" value="14" min="1" max="90" />
+    <label>تاریخ شروع</label>
+    <input type="date" id="new-start" />
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button class="btn" onclick="createPlan()">ساخت</button>
+      <button class="btn btn-ghost" onclick="closeModal('create-modal')">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="session-modal">
+  <div class="modal-content">
+    <h3>📝 جلسه مطالعاتی</h3>
+    <label>درس / موضوع</label>
+    <input id="s-subject" placeholder="ریاضی، فیزیک، ..." />
+    <label>ساعت شروع</label>
+    <input id="s-start" type="time" />
+    <label>ساعت پایان</label>
+    <input id="s-end" type="time" />
+    <label>یادداشت</label>
+    <input id="s-note" placeholder="اختیاری" />
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button class="btn" id="save-session-btn">ذخیره</button>
+      <button class="btn btn-ghost" onclick="closeModal('session-modal')">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<script src="api.js"></script>
+<script>
+if (!DigiMazAPI.loggedIn) location.href = 'login.html';
+
+let plansData = { plans: [], activePlanId: null };
+let currentEditing = null; // {planId, day, sessionId?}
+
+function faNum(n){ return String(n).replace(/\d/g, d=>'۰۱۲۳۴۵۶۷۸۹'[d]); }
+function formatDate(d){ try{ return new Date(d).toLocaleDateString('fa-IR'); }catch(e){ return d; } }
+
+async function load(){
+  DigiMazAPI.renderAuthWidget();
+  const me = await DigiMazAPI.me();
+  plansData = await DigiMazAPI.getPlans();
+  if (!plansData.plans.length){
+    await DigiMazAPI.createPlan({ name:'برنامه پیش‌فرض', duration:14 });
+    plansData = await DigiMazAPI.getPlans();
+  }
+  render(me);
+}
+
+function render(me){
+  const active = plansData.plans.find(p => p.id === plansData.activePlanId) || plansData.plans[0];
+  document.getElementById('app').innerHTML = `
+    <div class="profile-header">
+      <div class="profile-info">
+        <h1>👤 ${me?.name || 'دانش‌آموز'}</h1>
+        <p>نام کاربری: ${me?.username || ''} • برنامه‌های فعال: ${faNum(plansData.plans.length)}</p>
+      </div>
+      <div>
+        <button class="btn btn-sm" onclick="editName()">✏️ ویرایش نام</button>
+      </div>
+    </div>
+
+    <div class="tabs-bar" id="tabs"></div>
+    <div class="plan-view" id="plan-view"></div>
+
+    <div class="todo-section">
+      <h3 style="margin-bottom:12px">✅ تودو لیست روزانه (برنامه فعال)</h3>
+      <div id="todos"></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <input id="new-todo" placeholder="کار جدید برای امروز..." style="flex:1" />
+        <button class="btn" onclick="addTodo()">افزودن</button>
+      </div>
+    </div>
+  `;
+  renderTabs();
+  renderPlan(active);
+  renderTodos(active);
+}
+
+function renderTabs(){
+  const bar = document.getElementById('tabs');
+  bar.innerHTML = plansData.plans.map(p => `
+    <div class="tab ${p.id===plansData.activePlanId?'active':''}" onclick="switchPlan('${p.id}')">
+      ${p.name} <span class="close" onclick="event.stopPropagation();deletePlan('${p.id}')">×</span>
+    </div>
+  `).join('') + `<div class="tab add-tab" onclick="openCreate()">+</div>`;
+}
+
+function renderPlan(plan){
+  if (!plan) return;
+  const days = [];
+  const start = new Date(plan.startDate || new Date());
+  for(let i=0;i<plan.duration;i++){
+    const d = new Date(start); d.setDate(d.getDate()+i);
+    const daySessions = (plan.sessions||[]).filter(s => s.day === i);
+    days.push(`
+      <div class="day-card">
+        <div class="day-title">روز ${faNum(i+1)} — ${formatDate(d)}</div>
+        ${daySessions.map(s => `
+          <div class="session-item">
+            <div>
+              <strong>${s.subject||'بدون عنوان'}</strong><br>
+              <span class="time">${s.start||''} تا ${s.end||''}</span>
+              ${s.note ? `<div style="font-size:.72rem;color:var(--text2)">${s.note}</div>` : ''}
+            </div>
+            <div>
+              <button class="btn btn-sm btn-ghost" onclick="editSession('${plan.id}',${i},'${s.id}')">✏️</button>
+              <button class="btn btn-sm" style="background:var(--accent5)" onclick="delSession('${plan.id}','${s.id}')">🗑️</button>
+            </div>
+          </div>
+        `).join('') || '<div style="color:var(--text3);font-size:.75rem;padding:6px">خالی</div>'}
+        <button class="btn btn-sm" style="margin-top:8px;width:100%" onclick="addSession('${plan.id}',${i})">+ جلسه</button>
+      </div>
+    `);
+  }
+  document.getElementById('plan-view').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <h2 style="font-size:1.1rem">${plan.name} <span style="color:var(--text2);font-size:.8rem">(${faNum(plan.duration)} روز)</span></h2>
+      <button class="btn btn-sm btn-ghost" onclick="renamePlan('${plan.id}')">✏️ تغییر نام</button>
+    </div>
+    <div class="days-grid">${days.join('')}</div>
+  `;
+}
+
+function renderTodos(plan){
+  const box = document.getElementById('todos');
+  const todos = plan?.todos || [];
+  if (!todos.length) box.innerHTML = '<div style="color:var(--text3);font-size:.85rem">هنوز تودویی نداری. یکی اضافه کن!</div>';
+  else box.innerHTML = todos.map(t => `
+    <div class="todo-item ${t.done?'done':''}">
+      <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo('${plan.id}','${t.id}',this.checked)" />
+      <span style="flex:1">${t.text}</span>
+      <button class="btn btn-sm btn-ghost" onclick="delTodo('${plan.id}','${t.id}')">×</button>
+    </div>
+  `).join('');
+}
+
+async function switchPlan(id){
+  await DigiMazAPI.setActivePlan(id);
+  plansData.activePlanId = id;
+  const active = plansData.plans.find(p => p.id === id);
+  renderTabs();
+  renderPlan(active);
+  renderTodos(active);
+}
+
+function openCreate(){
+  document.getElementById('new-start').value = new Date().toISOString().slice(0,10);
+  document.getElementById('create-modal').classList.add('show');
+}
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+document.querySelectorAll('.preset').forEach(el => {
+  el.onclick = () => {
+    document.querySelectorAll('.preset').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('new-duration').value = el.dataset.d;
+  };
+});
+
+async function createPlan(){
+  const name = document.getElementById('new-name').value || 'برنامه جدید';
+  const duration = +document.getElementById('new-duration').value || 7;
+  const startDate = document.getElementById('new-start').value;
+  const res = await DigiMazAPI.createPlan({ name, duration, startDate });
+  plansData.plans.push(res.plan);
+  plansData.activePlanId = res.activePlanId || res.plan.id;
+  closeModal('create-modal');
+  document.getElementById('new-name').value = '';
+  load();
+}
+
+async function deletePlan(id){
+  if (!confirm('این برنامه حذف شود؟')) return;
+  if (plansData.plans.length <= 1){ alert('حداقل یک برنامه باید داشته باشی'); return; }
+  await DigiMazAPI.deletePlan(id);
+  load();
+}
+
+async function renamePlan(id){
+  const plan = plansData.plans.find(p => p.id === id);
+  const name = prompt('نام جدید:', plan.name);
+  if (name && name !== plan.name){
+    await DigiMazAPI.updatePlan(id, { name });
+    load();
+  }
+}
+
+function addSession(planId, day){
+  currentEditing = { planId, day, sessionId: null };
+  document.getElementById('s-subject').value = '';
+  document.getElementById('s-start').value = '';
+  document.getElementById('s-end').value = '';
+  document.getElementById('s-note').value = '';
+  document.getElementById('save-session-btn').onclick = saveSession;
+  document.getElementById('session-modal').classList.add('show');
+}
+
+function editSession(planId, day, sid){
+  const plan = plansData.plans.find(p => p.id === planId);
+  const s = plan.sessions.find(x => x.id === sid);
+  if (!s) return;
+  currentEditing = { planId, day, sessionId: sid };
+  document.getElementById('s-subject').value = s.subject || '';
+  document.getElementById('s-start').value = s.start || '';
+  document.getElementById('s-end').value = s.end || '';
+  document.getElementById('s-note').value = s.note || '';
+  document.getElementById('save-session-btn').onclick = saveSession;
+  document.getElementById('session-modal').classList.add('show');
+}
+
+async function saveSession(){
+  const { planId, day, sessionId } = currentEditing;
+  const plan = plansData.plans.find(p => p.id === planId);
+  const data = {
+    id: sessionId || Math.random().toString(36).slice(2,10),
+    day,
+    subject: document.getElementById('s-subject').value,
+    start: document.getElementById('s-start').value,
+    end: document.getElementById('s-end').value,
+    note: document.getElementById('s-note').value,
+    done: false
+  };
+  if (sessionId){
+    const idx = plan.sessions.findIndex(s => s.id === sessionId);
+    if (idx >= 0) plan.sessions[idx] = data;
+  } else {
+    plan.sessions.push(data);
+  }
+  await DigiMazAPI.updatePlan(planId, { sessions: plan.sessions });
+  closeModal('session-modal');
+  renderPlan(plan);
+}
+
+async function delSession(planId, sid){
+  if (!confirm('حذف شود؟')) return;
+  const plan = plansData.plans.find(p => p.id === planId);
+  plan.sessions = plan.sessions.filter(s => s.id !== sid);
+  await DigiMazAPI.updatePlan(planId, { sessions: plan.sessions });
+  renderPlan(plan);
+}
+
+async function addTodo(){
+  const text = document.getElementById('new-todo').value.trim();
+  if (!text) return;
+  const plan = plansData.plans.find(p => p.id === plansData.activePlanId);
+  if (!plan) return;
+  plan.todos = plan.todos || [];
+  plan.todos.push({ id: Math.random().toString(36).slice(2,10), text, done: false, date: new Date().toISOString().slice(0,10) });
+  await DigiMazAPI.updatePlan(plan.id, { todos: plan.todos });
+  document.getElementById('new-todo').value = '';
+  renderTodos(plan);
+}
+
+async function toggleTodo(planId, tid, done){
+  const plan = plansData.plans.find(p => p.id === planId);
+  const t = plan.todos.find(x => x.id === tid);
+  if (t) t.done = done;
+  await DigiMazAPI.updatePlan(planId, { todos: plan.todos });
+  renderTodos(plan);
+}
+
+async function delTodo(planId, tid){
+  const plan = plansData.plans.find(p => p.id === planId);
+  plan.todos = plan.todos.filter(t => t.id !== tid);
+  await DigiMazAPI.updatePlan(planId, { todos: plan.todos });
+  renderTodos(plan);
+}
+
+async function editName(){
+  const me = await DigiMazAPI.me();
+  const name = prompt('نام جدید:', me?.name || '');
+  if (name && name.trim()){
+    await DigiMazAPI.updateProfile(name.trim());
+    localStorage.setItem('dm_student_user', JSON.stringify({ ...DigiMazAPI.student, name: name.trim() }));
+    load();
+  }
+}
+
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ورود دانش‌آموز | دیجی ماز</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1117;--surface:#181c27;--surface2:#1e2335;--border:#2a3050;--accent:#4f8ef7;--accent2:#7c5cbf;--text:#e8ecf5;--text2:#8a94b0;--text3:#5a6280;--err:#e05c7a;--ok:#3dbfa0}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+nav{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;border-bottom:1px solid var(--border);background:rgba(15,17,23,.97);position:sticky;top:0;z-index:100}
+.logo{font-weight:900;font-size:1.2rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:4px;align-items:center}.nav-links a{color:var(--text2);text-decoration:none;padding:6px 14px;border-radius:8px;font-weight:600;font-size:.85rem}.nav-links a:hover{color:var(--text);background:var(--surface2)}.nav-links a.active{color:var(--accent)}
+.wrap{max-width:420px;margin:50px auto;padding:0 20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px}
+h1{font-size:1.3rem;font-weight:900;margin-bottom:6px;text-align:center}
+.sub{color:var(--text2);font-size:.85rem;text-align:center;margin-bottom:22px}
+.tabs{display:flex;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:20px}
+.tabs button{flex:1;background:none;border:none;color:var(--text2);font-family:inherit;font-weight:700;font-size:.85rem;padding:9px;border-radius:8px;cursor:pointer}
+.tabs button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+label{font-size:.75rem;color:var(--text2);font-weight:600;display:block;margin:12px 0 5px}
+input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;padding:11px 14px;font-size:.9rem}input:focus{outline:none;border-color:var(--accent)}
+.btn{width:100%;margin-top:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:10px;padding:12px;font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer}
+.btn:disabled{opacity:.6}
+.alert{display:none;margin-top:14px;padding:12px;border-radius:10px;font-size:.85rem}
+.alert.err{display:block;background:rgba(224,92,122,.12);border:1px solid var(--err);color:var(--err)}
+.alert.ok{display:block;background:rgba(61,191,160,.12);border:1px solid var(--ok);color:var(--ok)}
+.hint{font-size:.72rem;color:var(--text3);text-align:center;margin-top:14px;line-height:1.9}
+footer{text-align:center;padding:24px;color:var(--text3);font-size:.75rem;border-top:1px solid var(--border);margin-top:50px}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">📚 دیجی ماز</div>
+  <div class="nav-links">
+    <a href="index.html">خانه</a>
+    <a href="schedule.html">برنامه مطالعاتی</a>
+    <a href="progress.html">پیشرفت من</a>
+    <a href="contact.html">ارتباط با ما</a>
+    <span id="dm-auth"></span>
+  </div>
+</nav>
+<div class="wrap">
+  <div class="card">
+    <h1>🔑 ورود دانش‌آموز</h1>
+    <p class="sub">با حساب خودت وارد شو تا پیشرفتت جداگانه ذخیره شود</p>
+    <div class="tabs">
+      <button id="tab-login" class="active" onclick="switchTab('login')">ورود</button>
+      <button id="tab-register" onclick="switchTab('register')">ثبت‌نام</button>
+    </div>
+    <div id="form-register" style="display:none">
+      <label>نام و نام خانوادگی</label>
+      <input type="text" id="r-name" placeholder="مثلاً: علی رضایی">
+      <label>نام کاربری (انگلیسی، بدون فاصله)</label>
+      <input type="text" id="r-user" placeholder="مثلاً: ali123" dir="ltr" style="text-align:left">
+      <label>رمز عبور (حداقل ۴ حرف)</label>
+      <input type="password" id="r-pass" placeholder="••••••">
+    </div>
+    <div id="form-login">
+      <label>نام کاربری</label>
+      <input type="text" id="l-user" placeholder="نام کاربری" dir="ltr" style="text-align:left">
+      <label>رمز عبور</label>
+      <input type="password" id="l-pass" placeholder="••••••">
+    </div>
+    <button class="btn" id="go-btn" onclick="go()">ورود</button>
+    <div class="alert err" id="err"></div>
+    <div class="alert ok" id="ok"></div>
+    <p class="hint">هر دانش‌آموز حساب جدا دارد.<br>تیک‌ها، یادداشت‌ها و درصد پیشرفت فقط مال خودت ذخیره می‌شود و مدیر هم همه را می‌بیند.</p>
+  </div>
+</div>
+<footer>دیجی ماز • ورود دانش‌آموز</footer>
+<script src="api.js"></script>
+<script>
+let mode = 'login';
+function switchTab(m){
+  mode = m;
+  document.getElementById('tab-login').classList.toggle('active', m==='login');
+  document.getElementById('tab-register').classList.toggle('active', m==='register');
+  document.getElementById('form-login').style.display = m==='login' ? 'block' : 'none';
+  document.getElementById('form-register').style.display = m==='register' ? 'block' : 'none';
+  document.getElementById('go-btn').textContent = m==='login' ? 'ورود' : 'ساخت حساب';
+  hideAlerts();
+}
+function hideAlerts(){ document.getElementById('err').className='alert err'; document.getElementById('err').style.display='none'; document.getElementById('ok').className='alert ok'; document.getElementById('ok').style.display='none'; }
+function showErr(t){ const e=document.getElementById('err'); e.textContent='⚠️ '+t; e.style.display='block'; }
+function showOk(t){ const e=document.getElementById('ok'); e.textContent='✅ '+t; e.style.display='block'; }
+// if already logged in, go to schedule
+if (DigiMazAPI.loggedIn) location.href = 'schedule.html';
+DigiMazAPI.initPublic(); DigiMazAPI.renderAuthWidget();
+async function go(){
+  hideAlerts();
+  const btn = document.getElementById('go-btn'); btn.disabled = true; btn.textContent = '…';
+  try {
+    if (mode === 'register') {
+      const name = document.getElementById('r-name').value.trim();
+      const user = document.getElementById('r-user').value.trim();
+      const pass = document.getElementById('r-pass').value;
+      if (!name) throw new Error('نام را وارد کن');
+      await DigiMazAPI.register(name, user, pass);
+      showOk('حسابت ساخته شد! در حال ورود به برنامه…');
+      setTimeout(()=>location.href='schedule.html', 800);
+    } else {
+      const user = document.getElementById('l-user').value.trim();
+      const pass = document.getElementById('l-pass').value;
+      await DigiMazAPI.login(user, pass);
+      showOk('خوش برگشتی! در حال ورود…');
+      setTimeout(()=>location.href='schedule.html', 800);
+    }
+  } catch(e){ showErr(e.message || 'خطا'); btn.disabled=false; btn.textContent = mode==='login'?'ورود':'ساخت حساب'; }
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Enter') go(); });
+</script>
+</body>
+</html>
